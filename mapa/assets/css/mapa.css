@@ -1,0 +1,263 @@
+/* Mapa do Vale (protótipo do MUVVI). Sem framework e sem etapa de build: um arquivo, carregado direto.
+   Paleta sóbria de papel e água, para o mapa-base ser a coisa mais colorida da tela. */
+
+:root{
+  --papel:#f7f5f0; --papel-2:#fffefb; --borda:#ddd8cd;
+  --tinta:#1f2328; --tinta-2:#5b6169; --tinta-3:#7d848c;
+  --agua:#1d6fa5; --agua-escura:#15567f;
+  --foco:#7b5cff;
+  --perigo:#9b2226;
+  --font:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  --raio:10px;
+  --sombra:0 6px 20px -12px rgba(31,35,40,.45);
+}
+*{box-sizing:border-box}
+/* `hidden` é como o JS liga e desliga ficha, gaveta e avisos. O display:none que vem do navegador
+   perde para qualquer classe nossa (.ficha{display:flex}), então aqui ele é reafirmado. */
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+/* Coluna flex (e não grid de linhas fixas): a gaveta de dados aparece e some, e o palco
+   precisa ocupar o que sobra nos dois casos. */
+body{
+  display:flex; flex-direction:column;
+  background:var(--papel); color:var(--tinta);
+  font:15px/1.55 var(--font); -webkit-font-smoothing:antialiased;
+}
+
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* O primeiro tab da página leva direto à lista — quem usa teclado não fica preso no mapa. */
+.pular{position:absolute;left:-9999px;top:0;z-index:1200;background:var(--tinta);color:#fff;padding:10px 16px;border-radius:0 0 var(--raio) 0;text-decoration:none}
+.pular:focus{left:0}
+
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--foco);outline-offset:2px}
+
+/* ---------- topo ---------- */
+.topo{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;padding:14px clamp(12px,3vw,26px) 10px;border-bottom:1px solid var(--borda);background:var(--papel-2)}
+.topo h1{margin:0;font-size:clamp(19px,2.4vw,25px);letter-spacing:-.01em}
+.topo .sub{margin:0;color:var(--tinta-2);font-size:13px}
+.marca{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.selo{margin:0 0 0 auto;font-size:12.5px;color:var(--tinta-2);background:#fdf6e3;border:1px solid #e8dcb8;border-radius:999px;padding:5px 13px}
+
+/* ---------- ferramentas ---------- */
+.ferramentas{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:11px clamp(12px,3vw,26px);border-bottom:1px solid var(--borda);background:var(--papel-2)}
+.busca{margin:0;flex:1 1 210px;min-width:0;max-width:330px}
+.busca input{width:100%;padding:8px 12px;font:inherit;color:inherit;background:var(--papel);border:1px solid var(--borda);border-radius:999px}
+
+/* ---- barra de tags ---- */
+/* Rola para o lado e vai recebendo mais tags conforme chega ao fim (ver desenharTags em mapa.js).
+   As fixadas ficam na frente. Cada chip é um checkbox de verdade mais um botão de fixar. */
+/* O esmaecido na borda direita conta que a barra continua — sem ele, a última tag parece
+   simplesmente cortada e ninguém descobre que há mais. */
+.barra-tags{flex:1 1 320px;min-width:0;display:flex;align-items:center;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%);
+          mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%)}
+.tags-rolagem{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:3px 2px 7px;scrollbar-width:thin;scroll-behavior:smooth;max-width:100%}
+.tags-rolagem::-webkit-scrollbar{height:7px}
+.tags-rolagem::-webkit-scrollbar-thumb{background:var(--borda);border-radius:9px}
+.tags-rolagem::-webkit-scrollbar-thumb:hover{background:var(--tinta-3)}
+.tags-fim{flex:none;width:1px}
+.tags-vazio{margin:0;font-size:13px;color:var(--tinta-3)}
+
+.tag-chip{flex:none;display:inline-flex;align-items:stretch;border:1px solid var(--borda);border-radius:999px;background:var(--papel);overflow:hidden;max-width:260px}
+.tag-chip:hover{border-color:var(--tinta-3)}
+.tag-chip label{display:inline-flex;align-items:center;gap:6px;padding:5px 9px 5px 8px;cursor:pointer;font-size:13px;color:var(--tinta-2);user-select:none;min-width:0}
+.tag-chip input{position:absolute;opacity:0;width:1px;height:1px}
+.tag-chip .bolha{width:12px;height:12px;border-radius:50%;background:var(--cor,#999);flex:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.tag-nome{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag-conta{font-size:11px;color:var(--tinta-3);font-variant-numeric:tabular-nums;flex:none}
+/* ligada = esta tag está filtrando */
+.tag-chip.ligada{background:var(--cor);border-color:var(--cor)}
+.tag-chip.ligada label{color:#fff;font-weight:600}
+.tag-chip.ligada .bolha{background:#fff;box-shadow:none}
+.tag-chip.ligada .tag-conta{color:rgba(255,255,255,.8)}
+.tag-chip:has(input:focus-visible){outline:3px solid var(--foco);outline-offset:2px}
+
+.tag-fixar{flex:none;border:0;border-left:1px solid var(--borda);background:transparent;cursor:pointer;padding:0 8px;font-size:11px;line-height:1;filter:grayscale(1);opacity:.45}
+.tag-fixar:hover{opacity:1;filter:none;background:rgba(0,0,0,.05)}
+.tag-fixar[aria-pressed="true"]{opacity:1;filter:none}
+.tag-chip.ligada .tag-fixar{border-left-color:rgba(255,255,255,.35)}
+.tag-chip.ligada .tag-fixar:hover{background:rgba(255,255,255,.18)}
+/* a fixada ganha um contorno próprio, para se distinguir de uma simplesmente ligada */
+.tag-chip.presa{box-shadow:inset 0 0 0 1px var(--cor)}
+
+.acoes{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+
+/* ---------- botões ---------- */
+.b{font:600 14px/1 var(--font);padding:9px 15px;border-radius:999px;border:1px solid var(--borda);background:var(--papel-2);color:var(--tinta);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.b:hover{border-color:var(--tinta-3)}
+.b-primaria{background:var(--agua);border-color:var(--agua);color:#fff}
+.b-primaria:hover{background:var(--agua-escura);border-color:var(--agua-escura)}
+.b-perigo{color:var(--perigo);border-color:#e3c3c4}
+.b-perigo:hover{background:#fdf1f1;border-color:var(--perigo)}
+.b-mini{padding:5px 10px;font-size:12.5px}
+.b-arquivo{cursor:pointer}
+.b-fechar{font-size:22px;line-height:1;padding:3px 11px;border-radius:50%}
+/* Enquanto o modo "adicionar" está ligado, o botão fica visivelmente apertado. */
+#btn-adicionar[aria-pressed="true"]{background:var(--agua-escura);border-color:var(--agua-escura);color:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+
+/* ---------- gaveta de dados ---------- */
+.painel-dados{padding:14px clamp(12px,3vw,26px);border-bottom:1px solid var(--borda);background:#fffdf6}
+.painel-dados h2{margin:0 0 6px;font-size:16px}
+.nota{margin:0 0 10px;font-size:13px;color:var(--tinta-2);max-width:78ch}
+.nota code{background:var(--papel);border:1px solid var(--borda);border-radius:5px;padding:1px 5px;font-size:12.5px}
+.linha-botoes{display:flex;flex-wrap:wrap;gap:8px}
+#estado-rascunho{margin:10px 0 0;font-size:12.5px}
+
+/* ---------- palco: mapa + lista ---------- */
+.palco{flex:1 1 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);min-height:0}
+@media (max-width:900px){
+  .palco{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(300px,52vh) minmax(0,1fr)}
+}
+
+.caixa-mapa{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0}
+#mapa{flex:1 1 auto;min-height:260px;background:#e8eef2;z-index:0}
+.credito{margin:0;padding:5px 10px;font-size:11.5px;color:var(--tinta-3);background:var(--papel-2);border-top:1px solid var(--borda)}
+.credito a{color:var(--tinta-2)}
+.aviso{margin:0;padding:12px 16px;background:#fdf1f1;color:#7a1f22;border-top:1px solid #e3c3c4;font-size:13.5px}
+
+.painel-lista{border-left:1px solid var(--borda);background:var(--papel-2);display:flex;flex-direction:column;min-height:0}
+@media (max-width:900px){ .painel-lista{border-left:0;border-top:1px solid var(--borda)} }
+.painel-lista h2{margin:0;padding:12px 16px 10px;font-size:15px;border-bottom:1px solid var(--borda);display:flex;gap:8px;align-items:baseline}
+.contagem{font-weight:400;font-size:13px;color:var(--tinta-3)}
+.lista{list-style:none;margin:0;padding:6px;overflow:auto;flex:1 1 auto}
+.vazio{margin:0;padding:16px;color:var(--tinta-3);font-size:14px}
+
+/* Um item da lista: o botão grande foca/abre o ponto no mapa; o lápis abre a ficha. */
+.item{display:flex;align-items:stretch;gap:2px;border-radius:var(--raio);margin-bottom:3px}
+.item:hover{background:var(--papel)}
+.item.ativo{background:#eaf3f9;box-shadow:inset 0 0 0 1px #bcd9ea}
+.item-abrir{flex:1 1 auto;min-width:0;text-align:left;background:none;border:0;padding:9px 10px;cursor:pointer;font:inherit;color:inherit;border-radius:var(--raio);display:flex;gap:9px;align-items:flex-start}
+.item-abrir:focus-visible,.item-editar:focus-visible{outline:3px solid var(--foco);outline-offset:-2px}
+.pin{flex:none;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;line-height:1;margin-top:1px}
+.item-texto{min-width:0}
+.item-titulo{display:block;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-meta{display:block;font-size:12px;color:var(--tinta-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-editar{flex:none;background:none;border:0;padding:0 10px;cursor:pointer;color:var(--tinta-3);font-size:14px;border-radius:var(--raio)}
+.item-editar:hover{color:var(--agua)}
+/* Ponto ainda não conferido pela curadoria: um tracinho discreto, não um alarme. */
+.nao-revisado{border-left:3px solid #e0c58a;padding-left:5px}
+
+/* ---------- marcadores ---------- */
+.marcador{display:grid;place-items:center;width:26px;height:26px;border-radius:50% 50% 50% 2px;transform:rotate(-45deg);color:#fff;font-size:12px;font-weight:700;box-shadow:0 3px 8px -2px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.85)}
+.marcador span{transform:rotate(45deg)}
+.marcador.rascunho{border-style:dashed;border-color:#fff}
+
+/* popup do Leaflet, no tom da página */
+.leaflet-popup-content{margin:11px 13px;font:14px/1.5 var(--font)}
+.leaflet-popup-content h3{margin:0 0 4px;font-size:15px}
+.pop-meta{margin:0 0 7px;font-size:12.5px;color:var(--tinta-2)}
+.pop-tags{margin:0 0 8px;display:flex;flex-wrap:wrap;gap:4px}
+.etiqueta{display:inline-block;padding:2px 8px;border-radius:999px;color:#fff;font-size:11.5px;font-weight:600}
+.pop-resumo{margin:0 0 9px;font-size:13.5px}
+.pop-midia{display:block;max-width:100%;border-radius:7px;margin:0 0 8px}
+.pop-fonte{margin:7px 0 0;font-size:11.5px;color:var(--tinta-3)}
+.pop-acoes{display:flex;gap:7px;flex-wrap:wrap}
+
+/* ---------- ficha (formulário) ---------- */
+.fundo-modal{position:fixed;inset:0;background:rgba(31,35,40,.42);z-index:1000}
+.ficha{position:fixed;z-index:1001;right:0;top:0;bottom:0;width:min(470px,100%);background:var(--papel-2);box-shadow:var(--sombra);display:flex;flex-direction:column;border-left:1px solid var(--borda)}
+@media (max-width:620px){ .ficha{top:auto;height:88dvh;width:100%;border-radius:14px 14px 0 0;border-left:0} }
+.ficha form{display:flex;flex-direction:column;min-height:0;height:100%}
+.ficha-topo{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--borda)}
+.ficha-topo h2{margin:0;font-size:17px;flex:1 1 auto}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:11px 13px;padding:15px 16px;overflow:auto;flex:1 1 auto;align-content:start}
+.c{margin:0;display:flex;flex-direction:column;gap:4px;min-width:0}
+.c-largo{grid-column:1 / -1}
+.c label{font-size:12.5px;font-weight:600;color:var(--tinta-2)}
+.c input,.c select,.c textarea{font:inherit;color:inherit;padding:8px 10px;background:var(--papel);border:1px solid var(--borda);border-radius:7px;width:100%;min-width:0}
+.c textarea{resize:vertical;line-height:1.5}
+.c-check label{display:flex;gap:8px;align-items:center;font-weight:400;font-size:13.5px;color:var(--tinta)}
+.c-check input{width:auto;padding:0}
+.obr{color:var(--perigo)}
+.dica-coord{flex-direction:row;align-items:center;gap:9px;flex-wrap:wrap;font-size:12.5px;color:var(--tinta-3)}
+.erros{margin:0;padding:10px 16px 10px 34px;background:#fdf1f1;color:#7a1f22;font-size:13px;border-top:1px solid #e3c3c4}
+.ficha-rodape{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--borda);background:var(--papel)}
+.espaco{flex:1 1 auto}
+
+/* ---------- recado ---------- */
+.recado{position:fixed;left:50%;bottom:16px;transform:translate(-50%,14px);z-index:1100;margin:0;max-width:min(92vw,560px);
+  background:var(--tinta);color:#fff;font-size:13.5px;padding:10px 17px;border-radius:999px;box-shadow:var(--sombra);
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.recado.vendo{opacity:1;transform:translate(-50%,0)}
+
+/* Quem pediu menos animação no sistema não recebe transição nenhuma. */
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important} }
+
+/* ======== bloco "onde fica" na ficha ======== */
+/* O botão de marcar é a porta principal do fluxo; digitar coordenada fica recolhido atrás de um
+   <details>, disponível para quem já tem o número na mão. */
+.lugar{border:1px solid var(--borda);border-radius:var(--raio);padding:11px 12px;background:var(--papel);display:flex;flex-direction:column;gap:9px}
+.lugar-topo{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.lugar-rotulo{font-size:12.5px;font-weight:600;color:var(--tinta-2)}
+.lugar-estado{font-size:12.5px;color:var(--tinta-3);font-variant-numeric:tabular-nums}
+.lugar-estado.marcado{color:var(--agua-escura);font-weight:600}
+.b-marcar{align-self:flex-start;background:var(--agua);border-color:var(--agua);color:#fff;font-size:15px;padding:11px 20px}
+.b-marcar:hover{background:var(--agua-escura);border-color:var(--agua-escura)}
+.b-marcar span[aria-hidden]{font-size:17px}
+.coord-manual summary{font-size:12.5px;color:var(--tinta-2);cursor:pointer;width:fit-content}
+.coord-manual summary:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
+.coord-campos{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:end;margin-top:8px}
+.coord-campos .b-mini{grid-column:1 / -1;justify-self:start}
+
+/* barra que aparece sobre o mapa enquanto a pessoa escolhe o lugar */
+.marcando{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:900;display:flex;align-items:center;gap:12px;
+  background:var(--tinta);color:#fff;padding:10px 16px;border-radius:999px;box-shadow:var(--sombra);font-size:14px;max-width:calc(100% - 24px)}
+.marcando p{margin:0}
+.marcando .b{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+.marcando .b:hover{background:rgba(255,255,255,.14);border-color:#fff}
+
+/* ======== mídia: arrastar e soltar ======== */
+.midia-bloco{display:flex;flex-direction:column;gap:9px;border:1px solid var(--borda);border-radius:var(--raio);padding:11px 12px;background:var(--papel)}
+.solta{border:2px dashed var(--borda);border-radius:var(--raio);padding:18px 14px;text-align:center;cursor:pointer;background:var(--papel-2);transition:border-color .15s,background .15s}
+.solta:hover,.solta:focus-visible{border-color:var(--agua);background:#f3f8fb}
+.solta.sobre{border-color:var(--agua);background:#e8f2f8;border-style:solid}
+.solta-texto{margin:0;font-size:13.5px;color:var(--tinta-2)}
+.solta-texto span{font-size:12.5px;color:var(--tinta-3)}
+.nota-mini{margin:0;font-size:12px;color:var(--tinta-3);line-height:1.45}
+.opc{font-weight:400;color:var(--tinta-3)}
+
+.anexos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.anexo{display:flex;align-items:center;gap:9px;background:var(--papel-2);border:1px solid var(--borda);border-radius:8px;padding:6px 8px}
+.anexo-capa{flex:none;width:38px;height:38px;border-radius:6px;object-fit:cover;background:var(--papel);display:grid;place-items:center}
+.anexo-icone{font-size:16px;color:var(--tinta-2)}
+.anexo-texto{min-width:0;flex:1 1 auto;display:flex;flex-direction:column}
+.anexo-nome{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.anexo-meta{font-size:11.5px;color:var(--tinta-3)}
+
+/* ======== janela de salvar ======== */
+.b-salvar{background:#2f7a4d;border-color:#2f7a4d;color:#fff}
+.b-salvar:hover{background:#25613d;border-color:#25613d}
+
+.salvar{position:fixed;z-index:1001;left:50%;top:50%;transform:translate(-50%,-50%);width:min(540px,calc(100% - 24px));max-height:min(88dvh,780px);
+  background:var(--papel-2);border:1px solid var(--borda);border-radius:14px;box-shadow:var(--sombra);display:flex;flex-direction:column}
+.salvar form{display:flex;flex-direction:column;min-height:0;height:100%}
+.salvar-corpo{display:flex;flex-direction:column;gap:13px;padding:15px 17px;overflow:auto;flex:1 1 auto}
+/* A mensagem oficial para quem cadastra: tem que ser a primeira coisa lida, não um rodapé. */
+.recado-salvar{margin:0;font-size:14px;line-height:1.6;background:#fdf6e3;border:1px solid #e8dcb8;border-radius:var(--raio);padding:13px 15px;color:var(--tinta)}
+.recado-salvar a{color:var(--agua-escura);font-weight:600;word-break:break-all}
+
+.campos-livres{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:6px}
+.campo-livre{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:6px;align-items:center}
+.campo-livre input{font:inherit;color:inherit;padding:7px 9px;background:var(--papel);border:1px solid var(--borda);border-radius:7px;min-width:0}
+/* Em tela estreita o par vira duas linhas: nome do campo e o × em cima, conteúdo embaixo.
+   Sem fixar as posições, o × cai sozinho numa linha e estica de ponta a ponta. */
+@media (max-width:520px){
+  .campo-livre{grid-template-columns:minmax(0,1fr) auto}
+  .campo-livre .rotulo{grid-row:1;grid-column:1}
+  .campo-livre button{grid-row:1;grid-column:2}
+  .campo-livre .valor{grid-row:2;grid-column:1 / -1}
+}
+/* o "+ Adicionar campo" é um botão, não mais um campo: não deve esticar na coluna */
+#btn-add-campo{align-self:flex-start}
+
+/* ---------- seletor de traçado do rio ---------- */
+/* Fica dentro do mapa, no canto, porque é sobre o que está desenhado ali — e não uma
+   ferramenta de cadastro como as de cima. */
+.ctrl-tracado{
+  background:var(--papel-2); border:1px solid var(--borda); border-radius:var(--raio);
+  box-shadow:var(--sombra); padding:8px 10px; max-width:230px;
+}
+.ctrl-tracado .ctrl-rotulo{display:block;font-size:11.5px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--tinta-2);margin-bottom:5px}
+.ctrl-tracado .ctrl-select{width:100%;font:inherit;font-size:13px;color:inherit;background:var(--papel);border:1px solid var(--borda);border-radius:7px;padding:5px 7px}
+.ctrl-tracado .ctrl-fonte{margin:5px 0 0;font-size:11.5px;line-height:1.35;color:var(--tinta-3)}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="../assets/logo/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/logo/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo/favicon-192.png">
+  <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ArtAtk — editor</title>
+  <link rel="stylesheet" href="../assets/css/anim.css">
+  <link rel="stylesheet" href="../assets/css/galeria.css">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body class="editing">
+  <header id="top">
+    <a class="logo" href="../home/" title="Gehrarte — ir para a página inicial (o rascunho fica salvo)"><img src="../assets/logo/gehrarte-logo.png" alt="Gehrarte" width="38" height="38"></a>
+    <button id="btn-opcoes" class="btn" type="button" aria-haspopup="menu" aria-label="Opções" title="Opções: novo arquivo, salvar em PDF e onde ficam os seus dados"><span>Opções</span><svg class="ic" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="tools-nav" aria-label="Ferramentas do ArtAtk">
+      <span class="tn on">Editor de páginas</span>
+      <button id="tn-animador" class="tn" title="Animador — criador de SVG animado: rig de peças e pinos de deformação">Animador</button>
+      <button class="tn" disabled title="Em breve">Oficina de letras</button>
+    </div>
+    <button id="btn-inventory" class="btn" title="Voltar aos arquivos (o rascunho é salvo)" aria-label="Arquivos"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="5" rx="1"/><rect x="6" y="10" width="12" height="5" rx="1"/><rect x="6" y="17" width="12" height="4" rx="1"/></svg><span>Arquivos</span></button>
+    <input id="title" aria-label="Título da página" placeholder="Título da página" maxlength="80">
+    <span id="savestate"></span>
+    <div class="seg2" id="drawerseg" aria-label="Painéis">
+      <button data-drawer="lib"></button><button data-drawer="layers"></button><button data-drawer="props"></button>
+    </div>
+    <span class="spacer"></span>
+    <div class="seg2" id="devseg">
+      <button data-dev="d" title="Versão para computador"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>PC</span></button>
+      <button data-dev="m" title="Versão para celular"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>Celular</span></button>
+    </div>
+    <div class="zoom">
+      <button id="zout" class="btn icon" title="Diminuir zoom (Ctrl −)">−</button>
+      <button id="zfit" class="btn" title="Ajustar à tela (Ctrl 0)"><span id="zval">100%</span></button>
+      <button id="zin" class="btn icon" title="Aumentar zoom (Ctrl +)">+</button>
+    </div>
+    <button id="undo" class="btn icon" title="Desfazer (Ctrl Z)" disabled><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+    <button id="redo" class="btn icon" title="Refazer (Ctrl Y)" disabled><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+    <button id="btn-anim" class="btn" title="Pausar ou tocar as animações no editor"></button>
+    <button id="btn-preview" class="btn">Visualizar</button>
+    <button id="btn-savefile" class="btn primary" hidden title="Baixa o seu projeto como arquivo, no seu computador">Salvar arquivo</button>
+    <button id="btn-publish" class="btn primary">Publicar</button>
+    <span id="who" class="who"></span>
+    <button id="btn-panels" class="btn icon" title="Painéis: mostrar, esconder e reorganizar (Ctrl \)" aria-label="Painéis"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M9 11h12"/></svg></button>
+  </header>
+
+  <div id="app">
+    <div id="dock-left" class="dock" data-side="left"></div>
+    <div id="center">
+      <div id="pathbar" title="Qual página você está editando: tipo, estado (só no inventário / publicada) e arquivo. O rascunho fica salvo neste navegador."><span id="pb-kind" class="chip"></span><span id="pb-state" class="chip"></span><span id="pb-path"></span><i>·</i><span id="pb-name"></span><span id="pb-dev"></span></div>
+      <div id="abas-bar" class="abas-bar" hidden role="tablist" aria-label="Abas do projeto"></div>
+      <div id="vpwrap">
+        <button id="reg-canto" type="button" title="Unidade e guias das réguas" aria-label="Unidade e guias das réguas" aria-haspopup="menu">px</button>
+        <canvas id="reg-h" aria-hidden="true" title="Arraste para baixo para criar uma guia"></canvas>
+        <canvas id="reg-v" aria-hidden="true" title="Arraste para a direita para criar uma guia"></canvas>
+        <main id="viewport">
+          <div id="stage"><div id="holder"></div><div id="overlay"></div></div>
+        </main>
+      </div>
+    </div>
+    <div id="dock-right" class="dock" data-side="right"></div>
+    <div id="floats"></div>
+    <div id="drawer" hidden></div>
+    <!-- os painéis nascem aqui; o dock.js os coloca nas molduras (docks, flutuantes, gavetas ou outra janela) -->
+    <div id="panel-pool" hidden>
+      <nav id="rail" aria-label="Ferramentas">
+        <button data-tool="select" title="Selecionar (V)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l13 6.5-5.5 2L10 17z"/></svg></button>
+        <button data-tool="text" title="Texto (T)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg></button>
+        <button data-tool="shape" title="Forma — arraste no canvas (R)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></button>
+        <button data-tool="pencil" title="Lápis (P)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/></svg></button>
+        <button data-tool="wand" title="Varinha mágica — clique numa imagem para tirar o fundo (W)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19L19 5M15 3v4M13 5h4M5 7v3M3.5 8.5h3M19 15v4M17 17h4"/></svg></button>
+        <button data-tool="hand" title="Mover a vista — arraste o canvas (H)"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-3l-2-4a1.5 1.5 0 0 1 2.5-1.5L8 14"/></svg></button>
+      <button data-tool="image" title="Imagem…"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/></svg></button>
+      </nav>
+      <aside id="p-els" aria-label="Elementos"></aside>
+      <aside id="p-folha" aria-label="Folha de design"></aside>
+      <aside id="p-svg" aria-label="SVG animado"></aside>
+      <aside id="p-media" aria-label="Mídia"></aside>
+      <aside id="p-drive" aria-label="Drive"></aside>
+      <aside id="p-tpl" aria-label="Modelos"></aside>
+      <aside id="props" aria-label="Propriedades"></aside>
+      <aside id="layerspane" aria-label="Camadas"></aside>
+    </div>
+  </div>
+
+  <div id="rotate" hidden role="alert">
+    <svg class="ic" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="8" height="6" rx="1"/><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5"/></svg>
+    <h2>Gire o celular</h2>
+    <p>O ArtAtk funciona na horizontal. Vire o aparelho de lado para continuar — o seu trabalho está salvo.</p>
+    <button class="btn primary" data-full type="button">Tela cheia e travar na horizontal</button>
+  </div>
+  <script type="module" src="../assets/js/editor/main.js"></script>
+</body>
+</html>

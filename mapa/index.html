@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mapa Interativo</title>
+  <meta name="description" content="Mapa Interativo do Museu Virtual do Vale do Ivaí: o acervo localizado por coordenada, organizado por tags.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231d6fa5%27/%3E%3Cpath d=%27M4 21c6 0 6-7 12-7s6 7 12 7%27 stroke=%27%23fff%27 stroke-width=%273%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="assets/css/mapa.css">
+</head>
+<body>
+  <a class="pular" href="#lista">Pular para a lista de pontos</a>
+
+  <header class="topo">
+    <div class="marca">
+      <h1>Mapa Interativo</h1>
+      <p class="sub">Museu Virtual do Vale do Ivaí</p>
+    </div>
+  </header>
+
+  <div class="ferramentas">
+    <form class="busca" role="search" id="form-busca">
+      <label class="sr-only" for="q">Buscar ponto por título, município ou texto</label>
+      <input type="search" id="q" name="q" placeholder="Buscar por título, município…" autocomplete="off">
+    </form>
+
+    <!-- Tags cadastradas, em ordem alfabética. Rola para o lado e vai carregando o resto
+         conforme chega ao fim; as fixadas ficam sempre na frente. -->
+    <div class="barra-tags" id="barra-tags" role="group" aria-label="Filtrar por tag">
+      <div class="tags-rolagem" id="tags-rolagem">
+        <!-- preenchido por assets/js/mapa.js -->
+        <span class="tags-fim" id="tags-fim" aria-hidden="true"></span>
+      </div>
+      <p class="tags-vazio" id="tags-vazio">Nenhuma tag cadastrada ainda.</p>
+    </div>
+
+    <div class="acoes">
+      <button type="button" id="btn-adicionar" class="b b-primaria">
+        <span aria-hidden="true">+</span> Adicionar ponto
+      </button>
+      <button type="button" id="btn-salvar" class="b b-salvar">Salvar</button>
+      <button type="button" id="btn-dados" class="b" aria-expanded="false" aria-controls="painel-dados">Dados…</button>
+    </div>
+  </div>
+
+  <section class="painel-dados" id="painel-dados" hidden aria-labelledby="h-dados">
+    <h2 id="h-dados">Seus dados</h2>
+    <p class="nota">
+      O que você cadastra aqui fica <strong>no seu computador</strong> — nada é enviado para a internet
+      nem para nenhum servidor. Use <strong>Salvar</strong> para gravar o material na pasta que você
+      escolher. Enquanto não salvar, o trabalho fica guardado neste navegador.
+    </p>
+    <div class="linha-botoes">
+      <label class="b b-arquivo">
+        Abrir um arquivo salvo
+        <input type="file" id="arq-json" accept="application/json,.json" hidden>
+      </label>
+      <button type="button" id="btn-copiar" class="b">Copiar o JSON</button>
+      <button type="button" id="btn-descartar" class="b b-perigo">Apagar tudo e recomeçar</button>
+    </div>
+    <p class="nota" id="estado-rascunho"></p>
+  </section>
+
+  <main class="palco">
+    <div class="caixa-mapa">
+      <div id="mapa" role="application" aria-label="Mapa do Vale do Ivaí com os pontos do acervo">
+        <noscript>
+          <p class="aviso">Este mapa precisa de JavaScript. A lista de pontos ao lado funciona sem ele.</p>
+        </noscript>
+      </div>
+
+      <!-- Aparece só enquanto a pessoa está escolhendo o lugar do ponto no mapa. -->
+      <div class="marcando" id="marcando" hidden>
+        <p><strong>Clique no mapa</strong> onde este ponto fica.</p>
+        <button type="button" class="b b-mini" id="btn-cancelar-marcar">Cancelar</button>
+      </div>
+
+      <p class="aviso" id="falhou-mapa" hidden></p>
+      <p class="credito">
+        Mapa-base © <a href="https://www.openstreetmap.org/copyright" rel="noopener">colaboradores do OpenStreetMap</a> ·
+        biblioteca <a href="https://leafletjs.com/" rel="noopener">Leaflet</a> (BSD-2), servida deste repositório<span id="credito-tracado"></span>
+      </p>
+    </div>
+
+    <section class="painel-lista" aria-labelledby="h-lista">
+      <h2 id="h-lista">Pontos <span class="contagem" id="contagem"></span></h2>
+      <ul class="lista" id="lista" tabindex="-1"></ul>
+      <p class="vazio" id="lista-vazia" hidden>Nenhum ponto cadastrado ainda. Comece em "Adicionar ponto".</p>
+    </section>
+  </main>
+
+  <!-- ====== ficha do ponto ====== -->
+  <div class="fundo-modal" id="fundo-modal" hidden></div>
+  <section class="ficha" id="ficha" hidden role="dialog" aria-modal="true" aria-labelledby="h-ficha">
+    <form id="form-ponto" novalidate>
+      <div class="ficha-topo">
+        <h2 id="h-ficha">Adicionar um ponto</h2>
+        <button type="button" class="b b-fechar" id="btn-fechar-ficha" aria-label="Fechar sem salvar">×</button>
+      </div>
+
+      <div class="campos">
+        <p class="c c-largo">
+          <label for="f-titulo">Título <span class="obr" aria-hidden="true">*</span></label>
+          <input type="text" id="f-titulo" name="titulo" required maxlength="200" autocomplete="off">
+        </p>
+
+        <!-- Onde fica: o botão é a porta principal; digitar a coordenada é a alternativa. -->
+        <div class="c-largo lugar" id="bloco-lugar">
+          <div class="lugar-topo">
+            <span class="lugar-rotulo">Onde fica <span class="obr" aria-hidden="true">*</span></span>
+            <span class="lugar-estado" id="lugar-estado">Nenhum lugar marcado ainda</span>
+          </div>
+          <button type="button" class="b b-marcar" id="btn-marcar">
+            <span aria-hidden="true">◎</span> Marcar no mapa
+          </button>
+          <details class="coord-manual">
+            <summary>Ou digitar a coordenada</summary>
+            <div class="coord-campos">
+              <p class="c">
+                <label for="f-lat">Latitude</label>
+                <input type="number" id="f-lat" name="lat" step="any" min="-90" max="90" inputmode="decimal">
+              </p>
+              <p class="c">
+                <label for="f-lng">Longitude</label>
+                <input type="number" id="f-lng" name="lng" step="any" min="-180" max="180" inputmode="decimal">
+              </p>
+              <button type="button" class="b b-mini" id="btn-colar-coord">Colar coordenada</button>
+            </div>
+          </details>
+        </div>
+
+        <p class="c c-largo">
+          <label for="f-tags">Tags</label>
+          <input type="text" id="f-tags" name="tags" maxlength="400" autocomplete="off"
+                 list="tags-conhecidas" placeholder="rio, cachoeira, Cândido de Abreu"
+                 aria-describedby="dica-tags">
+          <span class="nota-mini" id="dica-tags">Separe por vírgula. Escreva as que quiser — a primeira dá a cor do ponto no mapa.</span>
+          <datalist id="tags-conhecidas"></datalist>
+        </p>
+
+        <p class="c">
+          <label for="f-municipio">Município</label>
+          <input type="text" id="f-municipio" name="municipio" maxlength="120" autocomplete="off">
+        </p>
+
+        <p class="c">
+          <label for="f-ano">Ano</label>
+          <input type="number" id="f-ano" name="ano" step="1" min="1000" max="2300" inputmode="numeric">
+        </p>
+
+        <p class="c">
+          <label for="f-lado">Lado do rio</label>
+          <select id="f-lado" name="ladoDoRio"></select>
+        </p>
+
+        <p class="c c-largo">
+          <label for="f-resumo">Resumo</label>
+          <textarea id="f-resumo" name="resumo" rows="3" maxlength="900"></textarea>
+        </p>
+
+        <!-- Mídia: arrastar arquivos ou colar um endereço. -->
+        <div class="c-largo midia-bloco">
+          <span class="lugar-rotulo">Imagens, vídeos e áudios</span>
+          <div class="solta" id="solta" tabindex="0" role="button"
+               aria-label="Adicionar arquivos: arraste até aqui ou tecle Enter para escolher">
+            <p class="solta-texto">Arraste os arquivos até aqui<br><span>ou clique para escolher</span></p>
+            <input type="file" id="arq-midia" multiple hidden
+                   accept="image/*,video/*,audio/*,.glb,.gltf">
+          </div>
+          <p class="nota-mini" id="aviso-anexos" hidden>
+            Os arquivos ficam nesta aba até você usar <strong>Salvar</strong>. Se fechar o navegador antes, eles se perdem.
+          </p>
+          <ul class="anexos" id="anexos"></ul>
+
+          <p class="c">
+            <label for="f-midia-url">Ou o endereço de uma mídia na internet</label>
+            <input type="url" id="f-midia-url" name="midiaUrl" maxlength="500" autocomplete="off" placeholder="https://…">
+          </p>
+          <p class="c">
+            <label for="f-midia-credito">Crédito (autoria, acervo de origem)</label>
+            <input type="text" id="f-midia-credito" name="midiaCredito" maxlength="200" autocomplete="off">
+          </p>
+        </div>
+
+        <p class="c c-largo">
+          <label for="f-fonte">Fonte / procedência</label>
+          <input type="text" id="f-fonte" name="fonte" maxlength="255" autocomplete="off" placeholder="De onde vem a informação">
+        </p>
+
+        <p class="c c-largo c-check">
+          <label><input type="checkbox" id="f-revisado" name="revisado"> Informação e lugar já conferidos</label>
+        </p>
+      </div>
+
+      <ul class="erros" id="erros-ficha" hidden></ul>
+
+      <div class="ficha-rodape">
+        <button type="button" class="b b-perigo" id="btn-excluir" hidden>Excluir ponto</button>
+        <span class="espaco"></span>
+        <button type="button" class="b" id="btn-cancelar">Cancelar</button>
+        <button type="submit" class="b b-primaria">Guardar ponto</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ====== salvar: guia de registro ====== -->
+  <div class="fundo-modal" id="fundo-salvar" hidden></div>
+  <section class="salvar" id="salvar" hidden role="dialog" aria-modal="true" aria-labelledby="h-salvar">
+    <form id="form-salvar" novalidate>
+      <div class="ficha-topo">
+        <h2 id="h-salvar">Salvar o material</h2>
+        <button type="button" class="b b-fechar" id="btn-fechar-salvar" aria-label="Fechar sem salvar">×</button>
+      </div>
+
+      <div class="salvar-corpo">
+        <p class="recado-salvar">
+          Por favor, identifique o material cadastrado preenchendo os campos abaixo. O material será
+          salvo na pasta de sua escolha em seu dispositivo. Caso queira contribuir com ele para o
+          MUVVI, envie a pasta compactada por e-mail para:
+          <a href="mailto:museuvirtualdovaledoivai@gmail.com">museuvirtualdovaledoivai@gmail.com</a>
+        </p>
+
+        <p class="c">
+          <label for="s-autor">Nome do autor: <span class="obr" aria-hidden="true">*</span></label>
+          <input type="text" id="s-autor" required maxlength="160" autocomplete="name">
+        </p>
+
+        <p class="c">
+          <label for="s-email">E-mail acadêmico <span class="opc">(opcional)</span></label>
+          <input type="email" id="s-email" maxlength="255" autocomplete="email" placeholder="ra000000@uem.br">
+        </p>
+
+        <div class="c">
+          <span class="lugar-rotulo">Outros campos <span class="opc">(você escolhe quais)</span></span>
+          <ul class="campos-livres" id="campos-livres"></ul>
+          <button type="button" class="b b-mini" id="btn-add-campo"><span aria-hidden="true">+</span> Adicionar campo</button>
+        </div>
+
+        <p class="nota-mini">
+          Vai ser salvo: <span id="salvar-resumo"></span> <span id="salvar-modo"></span>
+        </p>
+      </div>
+
+      <ul class="erros" id="salvar-aviso" hidden></ul>
+
+      <div class="ficha-rodape">
+        <span class="espaco"></span>
+        <button type="button" class="b" id="btn-salvar-cancela">Cancelar</button>
+        <button type="submit" class="b b-primaria" id="btn-salvar-confirma">Escolher pasta e salvar</button>
+      </div>
+    </form>
+  </section>
+
+  <p class="recado" id="recado" role="status" aria-live="polite"></p>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="assets/js/mapa.js"></script>
+</body>
+</html>

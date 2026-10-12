@@ -1,0 +1,41 @@
+{
+  "versao": 1,
+  "atualizadoEm": "2026-10-12",
+  "sobre": "Traçados de rios usados pelo Mapa Interativo. Gerado por tools/baixar-hidrografia.py.",
+  "conjuntos": [
+    {
+      "id": "ivai-osm",
+      "rio": "ivai",
+      "nome": "Rio Ivaí",
+      "fonte_curta": "OpenStreetMap",
+      "fonte": "OpenStreetMap, relação 7718660 (colaboradores do OpenStreetMap)",
+      "licenca": "ODbL 1.0 — exige atribuição aos colaboradores do OpenStreetMap",
+      "url": "https://www.openstreetmap.org/relation/7718660",
+      "escala": "variável (mapeamento colaborativo)",
+      "arquivo": "ivai-osm.geojson",
+      "comprimento_km": 703.3,
+      "vertices": 3284,
+      "linhas": 3,
+      "baixado_em": "2026-10-12",
+      "cor": "#1d6fa5",
+      "padrao": true
+    },
+    {
+      "id": "ivai-ibge",
+      "rio": "ivai",
+      "nome": "Rio Ivaí",
+      "fonte_curta": "IBGE BC250 (2025)",
+      "fonte": "IBGE — Base Cartográfica Contínua 1:250.000 (BC250), 2025, camada de trechos de drenagem",
+      "licenca": "Dados públicos do IBGE; uso livre com citação da fonte",
+      "url": "https://geoservicos.ibge.gov.br/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=CCAR%3ABC250_2025_hid_trecho_drenagem_l&CQL_FILTER=nome%3D%27Rio+Iva%C3%AD%27&outputFormat=application%2Fjson",
+      "escala": "1:250.000",
+      "arquivo": "ivai-ibge.geojson",
+      "comprimento_km": 690.0,
+      "vertices": 4263,
+      "linhas": 1,
+      "baixado_em": "2026-10-12",
+      "cor": "#1d6fa5",
+      "padrao": false
+    }
+  ]
+}
