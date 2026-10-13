@@ -1,6 +1,6 @@
 // Menu superior do blog e das ferramentas (compartilhado por home/ e ferramentas/).
-// Uso: <header id="site-nav" data-site-nav data-active="inicio|acervo|ferramentas" data-next="museu/"></header>
-//   `inicio` = o museu (a entrada), `acervo` = o periódico em /home/.
+// Uso: <header id="site-nav" data-site-nav data-active="inicio|ferramentas" data-next="museu/"></header>
+//   `inicio` = o museu, que é a entrada do site.
 //   data-next: para onde o Login volta depois de entrar (caminho relativo à raiz do site).
 import { h } from './core/dom.js';
 import { session, logout } from './core/auth.js';
@@ -30,10 +30,8 @@ function build(host) {
 
   const links = h('ul', { class: 'sn-links' },
     link('Início', 'museu/', 'inicio'),
-    link('Acervo', 'home/#artigos', 'acervo'),
-    link('Páginas', 'home/#paginas'),
     link('Mapa', 'mapa/'),
-    link('Sobre', 'home/#sobre'),
+    link('Sobre', 'museu/#/sobre'),
     dd);
 
   // ---- Login / Meu espaço ----
@@ -91,7 +89,7 @@ function build(host) {
   menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });   // âncora na mesma página: fecha o menu
   addEventListener('resize', () => { if (innerWidth > 900) setMenu(false); });
 
-  // sublinha a seção da página em que se está (home/): Artigos, Páginas, Exposições, Sobre
+  // sublinha a seção da página em que se está
   const secs = ['artigos', 'paginas', 'exposicoes', 'sobre'];
   if (active === 'inicio' && 'IntersectionObserver' in window) {
     const anchors = Object.fromEntries(secs.map((s) => [s, links.querySelector(`a[href$="#${s}"]`)]));

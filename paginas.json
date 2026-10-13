@@ -12,12 +12,6 @@
       "titulo": "Landing page",
       "funcao": "A capa do site: o nome do museu, a apresentação e o botão de entrar. É a primeira coisa que qualquer visitante vê e a porta de quem vai usar as ferramentas — o botão de entrar faz parte do documento, não o apague.",
       "caminho": "index.html"
-    },
-    {
-      "id": "home",
-      "titulo": "Painel — faixa de destaque",
-      "funcao": "A faixa do topo do painel da equipe. O resto do painel (acervo, páginas da equipe, mapa) é montado sozinho a partir do que a equipe publica.",
-      "caminho": "home/index.html"
     }
   ]
 }

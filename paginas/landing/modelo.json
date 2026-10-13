@@ -20,7 +20,7 @@
   },
   "elements": [
     {
-      "id": "evpivs7k",
+      "id": "exwyaljo",
       "t": "text",
       "name": "Nome do museu",
       "lock": false,
@@ -60,7 +60,7 @@
       "ah": true
     },
     {
-      "id": "e5n1f5l7",
+      "id": "eauox2qe",
       "t": "text",
       "name": "Linha de apoio",
       "lock": false,
@@ -100,7 +100,7 @@
       "ah": true
     },
     {
-      "id": "e9fdnse8",
+      "id": "esgen3hi",
       "t": "text",
       "name": "Apresentação",
       "lock": false,
@@ -140,7 +140,7 @@
       "ah": true
     },
     {
-      "id": "eid6h1pw",
+      "id": "eatkm0ao",
       "t": "shape",
       "name": "Botão Entrar (não apague: é a porta do sistema)",
       "lock": true,
