@@ -7,7 +7,7 @@
 // {
 //   id: 'gehrarte' | 'muvvi' | 'local' | …,
 //   marca: { nome, editor:'ArtAtk' },                     // o que o visitante vê (nome do site) × o que quem edita vê
-//   capacidades: { drive, publicar, paginasDoSite, perfisDaEquipe, modelos, perfilSimples },   // liga/desliga recursos
+//   capacidades: { drive, publicar, paginasDoSite, perfisDaEquipe, modelos, perfilSimples, arquivosDaPessoa },
 //   identidade(): Promise<null | { slug, nome, perfil:'completo'|'simples'|'leitura', podeSite? }>,
 //                                                         // null = não há pessoa logada → o editor chama entrar()
 //   entrar(proximo?): void,                               // leva ao login do host (no host local, não faz nada)
@@ -29,7 +29,11 @@
 // }
 // Armazenamento (docs/midia) é hoje o do navegador (core/store.js); trocá-lo pelo do host é a próxima etapa do contrato.
 
-export const CAPACIDADES_PADRAO = { drive: false, publicar: false, paginasDoSite: false, perfisDaEquipe: false, modelos: true, perfilSimples: false };
+// `arquivosDaPessoa`: a tela de Arquivos oferece arquivos próprios (começar, novo arquivo, recentes, o que
+// está neste computador). Desligado, a tela mostra SÓ o que está publicado na plataforma — é o caso do
+// MUVVI, onde a equipe edita as páginas do museu e não guarda trabalho pessoal no editor. Não mexe no
+// editor: inserir imagem do computador e a aba Drive continuam como estão.
+export const CAPACIDADES_PADRAO = { drive: false, publicar: false, paginasDoSite: false, perfisDaEquipe: false, modelos: true, perfilSimples: false, arquivosDaPessoa: true };
 export const PERFIS = ['completo', 'simples', 'leitura'];
 
 // Completa um host com os valores padrão. Não altera o objeto recebido.

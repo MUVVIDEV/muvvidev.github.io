@@ -10,5 +10,9 @@ export function criarHostMuvvi(cfg = {}) {
     ...criarHostGehrarte(cfg),
     id: 'muvvi',
     marca: { nome: cfg.marca?.nome || 'MUVVI', editor: 'ArtAtk' },
+    // A tela de Arquivos do museu mostra SÓ o que está publicado: a equipe edita as páginas do site, não
+    // guarda trabalho pessoal aqui. Isso tira a faixa de começar (meu espaço, arquivo novo, recentes) e o
+    // "No seu computador". Dentro do editor nada muda.
+    capacidades: { ...criarHostGehrarte(cfg).capacidades, arquivosDaPessoa: false },
   };
 }

@@ -259,17 +259,23 @@ async function main() {
   };
 
   // A faixa de começar, numa linha só: o meu espaço primeiro (em destaque), depois o arquivo novo, depois os recentes.
-  const faixa = [
-    ...secoes.espaco.map((x) => cartao(x.c)),
-    azulejoNovoArquivo(slug),
-    ...secoes.recentes.map((x) => cartao({ ...x.c, destaque: false, compacto: true })),
-  ];
-  $('#g-comecar').replaceChildren(...faixa);
-  $('#sub-comecar').textContent = secoes.espaco.length
-    ? 'O seu espaço, um arquivo novo e o que você editou por último.'
-    : 'Comece um arquivo em branco ou continue de onde parou.';
-
-  pinta('computador', '#g-computador', cap.drive ? [cartaoDrive(slug, cfg)] : []);
+  // Sem `arquivosDaPessoa` (o MUVVI), nem a faixa nem o que está neste computador aparecem: a tela fica só com
+  // o que está publicado na plataforma.
+  if (cap.arquivosDaPessoa) {
+    const faixa = [
+      ...secoes.espaco.map((x) => cartao(x.c)),
+      azulejoNovoArquivo(slug),
+      ...secoes.recentes.map((x) => cartao({ ...x.c, destaque: false, compacto: true })),
+    ];
+    $('#g-comecar').replaceChildren(...faixa);
+    $('#sub-comecar').textContent = secoes.espaco.length
+      ? 'O seu espaço, um arquivo novo e o que você editou por último.'
+      : 'Comece um arquivo em branco ou continue de onde parou.';
+    pinta('computador', '#g-computador', cap.drive ? [cartaoDrive(slug, cfg)] : []);
+  } else {
+    $('#sec-comecar').hidden = true;
+    $('#sec-computador').hidden = true;
+  }
   pinta('publicadas', '#g-publicadas');
   $('#sub-pub').textContent = resumoDaPlataforma(marca, sess, cap);
 
