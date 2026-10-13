@@ -1,12 +1,13 @@
 // "Onde ficam os meus dados" — lógica PURA (sem DOM, sem armazenamento): transforma o que o editor mediu (quantos arquivos, quanto
 // espaço, o que está ligado à conta) em linhas legíveis. Quem mede é editor/opcoes.js; aqui só se decide o que dizer, e isso é testado.
-import { humanSize } from './drive.js';
+import { humanSize, pastaDeMateriais } from './drive.js';
 
 const pl = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 const tam = (b) => (b > 0 ? ` · ${humanSize(b)}` : '');
 
 // info: { origem, docs:{n,bytes}, imagens:{n,bytes}, modelos:n, layout:{gravado, conta:null|'Google Drive'}, regua:bool, secoes:bool,
-//         sessao:bool, drive:null|{ conectado }, publicar:bool, uso:null|{usado,cota}, persistente:null|bool }
+//         sessao:bool, drive:null|{ conectado }, publicar:bool, uso:null|{usado,cota}, persistente:null|bool,
+//         marca:null|string (nome do site onde o ArtAtk está instalado; sem ele o texto fala só "o site") }
 export function descreverDados(info) {
   const aqui = 'Neste navegador';
   const sec = [];
@@ -22,8 +23,8 @@ export function descreverDados(info) {
     ],
   });
   const fora = [];
-  if (info.drive) fora.push({ rotulo: 'Materiais e cópias', onde: 'No seu Google Drive', detalhe: info.drive.conectado ? 'Conectado nesta sessão (pasta "Gehrarte — materiais").' : 'Não conectado nesta sessão. Conecte na ferramenta Drive para enviar e salvar cópias.' });
-  if (info.publicar) fora.push({ rotulo: 'Páginas publicadas', onde: 'No site do Gehrarte', detalhe: 'O que você publica vai para o site; o rascunho continua aqui.' });
+  if (info.drive) fora.push({ rotulo: 'Materiais e cópias', onde: 'No seu Google Drive', detalhe: info.drive.conectado ? `Conectado nesta sessão (pasta "${pastaDeMateriais(info.marca)}").` : 'Não conectado nesta sessão. Conecte na ferramenta Drive para enviar e salvar cópias.' });
+  if (info.publicar) fora.push({ rotulo: 'Páginas publicadas', onde: info.marca ? `No site do ${info.marca}` : 'No site', detalhe: 'O que você publica vai para o site; o rascunho continua aqui.' });
   if (fora.length) sec.push({ titulo: 'Fora deste navegador', linhas: fora });
 
   const prot = [];

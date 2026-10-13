@@ -99,7 +99,8 @@ const row = (k, ...v) => h('div', { class: 'pub-row' }, h('span', {}, k), h('div
 
 export async function openPublish() {
   if (bloqueado()) return;
-  if (NAO_PUBLICAVEIS.includes(S.doc.kind)) { toast('Este tipo de arquivo não é publicado pelo Gehrarte. Use “Exportar projeto” ou as ações do host (ex.: MUVVI). Para publicar um texto no blog, crie um Artigo.', 'err'); return; }
+  const marca = S.host?.marca?.nome || 'Gehrarte';
+  if (NAO_PUBLICAVEIS.includes(S.doc.kind)) { toast(`Este tipo de arquivo não é publicado pelo ${marca}. Use “Exportar projeto” ou as ações do host. Para publicar um texto no blog, crie um Artigo.`, 'err'); return; }
   await saveNow();
   const cfg = await siteConfig();
   const pagina = S.doc.kind === 'pagina';
@@ -107,7 +108,7 @@ export async function openPublish() {
   const derived = S.doc.elements.filter((e) => !e.f.m).length;
   const empty = !S.doc.elements.length;
   const dir = publishDir(S.slug, S.doc);
-  const host = siteHost(cfg) || 'o site do Gehrarte';
+  const host = siteHost(cfg) || `o site do ${marca}`;
   const url = publishedUrl(cfg, S.slug, S.doc, S.siteEntry);
   // config.json "googleFake": só o ambiente de homologação (tools/homologacao) usa — pula a janelinha do Google; o Publicador de verdade recusaria o token
   const pub = cfg.publicador ? createPublicador({ url: cfg.publicador, clientId: cfg.googleClientId, slug: S.slug, ...(cfg.googleFake ? { requestToken: async () => ({ access_token: 'homologacao', expires_in: 3600 }) } : {}) }) : null;
@@ -122,7 +123,7 @@ export async function openPublish() {
     : pagina ? 'ainda não — hoje o site mostra a versão original' : 'ainda não foi publicada';
 
   const destino = h('div', { class: 'pubbox' },
-    h('p', { class: 'pub-head', html: icon('upload', 15) + `<span>Esta publicação vai para <b>${host}</b> — o site público do Gehrarte.</span>` }),
+    h('p', { class: 'pub-head', html: icon('upload', 15) + `<span>Esta publicação vai para <b>${host}</b> — o site público do ${marca}.</span>` }),
     h('p', { class: 'pub-sub' }, pagina ? 'Qualquer pessoa na internet verá a mudança, não só a equipe.' : 'Qualquer pessoa na internet poderá ver esta página, não só a equipe.'),
     row('Onde', h('a', { href: url, target: '_blank', rel: 'noopener' }, url.replace(/^https?:\/\//, ''))),
     pagina && S.siteEntry ? row('O que é', S.siteEntry.funcao) : null,

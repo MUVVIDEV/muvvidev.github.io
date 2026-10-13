@@ -1,6 +1,6 @@
 // Liga o cliente do Drive (core/drive.js) ao resto do site: Client ID do config.json e conferência da conta
 // com o e-mail liberado em users.json. Compartilhado pelo editor (aba Drive) e pelo painel de arquivos.
-import { createDrive } from './drive.js';
+import { createDrive, pastaDeMateriais } from './drive.js';
 import { loadConfig, loadUsers, hashEmail } from './auth.js';
 
 const cache = new Map();
@@ -10,7 +10,7 @@ export function getDrive(slug) {
   if (!cache.has(slug)) {
     cache.set(slug, (async () => {
       const [cfg, users] = await Promise.all([loadConfig(), loadUsers()]);
-      const drive = createDrive({ clientId: cfg.googleClientId, slug });
+      const drive = createDrive({ clientId: cfg.googleClientId, slug, pasta: pastaDeMateriais(cfg.marca?.nome) });
       const expectedHash = users.find((u) => u.slug === slug)?.emailHash;
       drive.connectAs = () => {
         if (!window.isSecureContext) throw new Error('O Drive só funciona em https (ou localhost).');

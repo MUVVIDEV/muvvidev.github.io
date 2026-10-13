@@ -41,7 +41,7 @@ export async function medirDados() {
     modelos, layout: { gravado: !!lerLS(chaveLayout(slug)), conta: prefs && lerLS(chaveSync(slug)) === '1' ? (prefs.rotulo || 'conta') : null },
     regua: !!lerLS('artatk.regua'), secoes: !!lerLS('artatk.secoes'), sessao: !!S.host?.sair,
     drive: S.host?.capacidades.drive ? { conectado: await driveConectado() } : null, publicar: !!S.host?.capacidades.publicar,
-    uso, persistente,
+    uso, persistente, marca: S.host?.marca?.nome || null,
   };
 }
 async function driveConectado() { try { const { getDrive } = await import('../core/drive-ui.js'); return (await getDrive(S.slug)).isConnected(); } catch { return false; } }

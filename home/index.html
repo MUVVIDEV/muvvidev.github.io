@@ -2,79 +2,15 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <link rel="icon" href="../assets/logo/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/logo/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo/favicon-192.png">
-  <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MUVVI — Museu Virtual do Vale do Ivaí</title>
-  <meta name="description" content="Museu Virtual do Vale do Ivaí: acervo, páginas da equipe e o mapa do patrimônio cultural e natural da região.">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="../assets/css/blog.css">
-  <meta property="og:title" content="MUVVI — Museu Virtual do Vale do Ivaí">
-  <meta property="og:description" content="O patrimônio cultural e natural do Vale do Ivaí, pesquisado e documentado por estudantes de História da UEM.">
-  <meta property="og:image" content="https://muvvidev.github.io/assets/logo/muvvi-compartilhar.jpg">
-  <meta property="og:url" content="https://muvvidev.github.io/">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- A entrada do site é o MUSEU. Esta rota existe só para não quebrar endereço já divulgado: /home/ era o
+       periódico (hoje em /acervo/) e era onde o login caía. Quem chega aqui segue para o museu. -->
+  <link rel="canonical" href="../museu/">
+  <meta http-equiv="refresh" content="0; url=../museu/">
+  <script>location.replace('../museu/' + location.hash);</script>
 </head>
-<body class="blog">
-  <header id="site-nav" data-site-nav data-active="inicio" data-next="home/"></header>
-
-  <main id="conteudo">
-    <!-- FAIXA DE DESTAQUE: feita no editor (paginas/home/page.json). Só aparece depois de publicada; vazia, não ocupa espaço. -->
-    <div id="destaque-home" aria-label="Destaque"></div>
-    <!-- MASTRO do periódico -->
-    <div class="wrap mastro">
-      <div class="mastro-top"><span>Vol. 1 · n.º 1 · 2026</span><span>Patrimônio em Diálogo</span><span>UEM · Campus Regional do Vale do Ivaí</span></div>
-      <h1 class="mastro-titulo"><img src="../assets/logo/muvvi.webp" alt="MUVVI — Museu Virtual do Vale do Ivaí" width="1031" height="299"></h1>
-      <p class="mastro-sub">Museu Virtual do Vale do Ivaí · projeto de extensão Patrimônio em Diálogo · LAEE/UEM</p>
-      <div class="regra-dupla" role="presentation"></div>
-      <nav class="sumario" aria-label="Neste número">
-        <a href="#artigos"><b>§ I</b>Acervo</a>
-        <a href="#paginas"><b>§ II</b>Páginas da equipe</a>
-        <a href="#exposicoes"><b>§ III</b>Mapa</a>
-        <a href="#sobre"><b>§ IV</b>Sobre</a>
-      </nav>
-    </div>
-
-    <div class="wrap">
-      <section class="sec" id="artigos" aria-labelledby="h-artigos">
-        <header class="sec-h"><span class="num">§ I</span><h2 id="h-artigos">Acervo</h2><p>Os bens inventariados pela equipe: objetos, celebrações, lendas, construções e paisagens do Vale do Ivaí.</p></header>
-        <div id="lista-artigos" class="artigos" aria-live="polite"></div>
-      </section>
-
-      <section class="sec" id="paginas" aria-labelledby="h-paginas">
-        <header class="sec-h"><span class="num">§ II</span><h2 id="h-paginas">Páginas da equipe</h2><p>Cada integrante tem uma página própria, feita no editor ArtAtk: texto, imagem, desenho e animação.</p></header>
-        <div id="lista-paginas" class="equipe" aria-live="polite"></div>
-      </section>
-
-      <section class="sec" id="exposicoes" aria-labelledby="h-expos">
-        <header class="sec-h"><span class="num">§ III</span><h2 id="h-expos">Mapa</h2><p>O acervo localizado no território. <a href="../mapa/">Abrir o Mapa Interativo</a>.</p></header>
-        <div id="lista-expos" aria-live="polite"></div>
-      </section>
-
-      <section class="sec" id="sobre" aria-labelledby="h-sobre">
-        <header class="sec-h"><span class="num">§ IV</span><h2 id="h-sobre">Sobre</h2></header>
-        <!-- TEXTO PROVISÓRIO: será trocado pelo texto oficial do projeto de extensão. -->
-        <div class="sobre">
-          <p>O Museu Virtual do Vale do Ivaí (MUVVI) é uma iniciativa acadêmica e extensionista desenvolvida por estudantes do curso de História da Universidade Estadual de Maringá (UEM), no Campus Regional do Vale do Ivaí, vinculada ao projeto de extensão Patrimônio em Diálogo: Arqueologia Pública e Comunicação Museológica, no LAEE-UEM.</p>
-          <p>Todas as etapas de construção do museu são realizadas pelos estudantes, da pesquisa e identificação das referências culturais até a seleção, organização e produção dos conteúdos publicados aqui.</p>
-          <p>Nosso trabalho parte do entendimento de que o patrimônio cultural é constituído pelas referências às quais as pessoas e os grupos sociais atribuem sentidos, valores e significados — por isso buscamos conhecer as memórias, os saberes e as experiências das comunidades da região.</p>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer class="rodape">
-    <div class="wrap">
-      <span>© 2026 MUVVI · Museu Virtual do Vale do Ivaí · UEM</span>
-      <span class="links"><a href="../ferramentas/">Ferramentas</a><a href="../mapa/">Mapa</a><a href="../">Capa</a></span>
-    </div>
-  </footer>
-
-  <script type="module" src="../assets/js/site-nav.js"></script>
-  <script type="module" src="../assets/js/blog.js"></script>
+<body>
+  <p>Esta página mudou de lugar. <a href="../museu/">Ir para o museu</a> · <a href="../acervo/">ir para o acervo</a>.</p>
 </body>
 </html>

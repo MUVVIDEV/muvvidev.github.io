@@ -1,5 +1,6 @@
 // Google Drive: os materiais dos artistas (imagens, fontes, PSD, PDF…) ficam no Drive da conta Google
-// INSTITUCIONAL de cada um, numa pasta "Gehrarte — materiais", e ficam à mão durante a edição.
+// INSTITUCIONAL de cada um, numa pasta própria do site ("Gehrarte — materiais", "MUVVI — materiais"…),
+// e ficam à mão durante a edição. O nome sai de pastaDeMateriais(marca); quem monta o cliente passa em `pasta`.
 //
 // Escopo `drive.file`: o aplicativo só enxerga o que ele mesmo criou (a pasta e o que for enviado por aqui).
 // Não é escopo sensível — não exige verificação do Google — e o Gehrarte nunca vê o resto do Drive de ninguém.
@@ -9,7 +10,10 @@
 // então a lógica é testável em Node (tests/drive.test.mjs).
 import './migracao.js';
 export const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-export const FOLDER_NAME = 'Gehrarte — materiais';
+// Nome da pasta de materiais a partir do nome do site (config.json › marca.nome). FOLDER_NAME é o padrão
+// histórico, que vale quando ninguém informa a marca.
+export const pastaDeMateriais = (marca) => `${marca || 'Gehrarte'} — materiais`;
+export const FOLDER_NAME = pastaDeMateriais();
 export const FOLDER_MIME = 'application/vnd.google-apps.folder';
 const API = 'https://www.googleapis.com/drive/v3';
 const UPLOAD = 'https://www.googleapis.com/upload/drive/v3';
@@ -90,7 +94,7 @@ const safe = (get) => { try { return get(); } catch { return null; } };
 const memStore = () => { const m = new Map(); return { getItem: (k) => m.get(k) ?? null, setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k) }; };
 
 export function createDrive({
-  clientId, slug,
+  clientId, slug, pasta = FOLDER_NAME,
   requestToken = gsiRequestToken,
   fetchImpl = (...a) => fetch(...a),
   put = xhrPut,
@@ -142,7 +146,7 @@ export function createDrive({
       return { email: j.user?.emailAddress || '', nome: j.user?.displayName || '', cota: { usado: Number(q.usage) || 0, limite: q.limit ? Number(q.limit) : null } };
     },
 
-    // A pasta "Gehrarte — materiais": reaproveita a lembrada/encontrada ou cria. Devolve o id.
+    // A pasta de materiais deste site: reaproveita a lembrada/encontrada ou cria. Devolve o id.
     async ensureFolder() {
       if (folderId) return folderId;
       const cached = local.getItem(K.folder);
@@ -152,11 +156,11 @@ export function createDrive({
           if (!f.trashed) return (folderId = cached);
         } catch (e) { if (e.status !== 404) throw e; }
       }
-      const q = `mimeType='${FOLDER_MIME}' and name='${esc(FOLDER_NAME)}' and trashed=false`;
+      const q = `mimeType='${FOLDER_MIME}' and name='${esc(pasta)}' and trashed=false`;
       const found = await json(`${API}/files?${new URLSearchParams({ q, fields: 'files(id)', pageSize: '1' })}`);
       let id = found.files?.[0]?.id;
       if (!id) {
-        id = (await json(`${API}/files?fields=id`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: FOLDER_NAME, mimeType: FOLDER_MIME }) })).id;
+        id = (await json(`${API}/files?fields=id`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: pasta, mimeType: FOLDER_MIME }) })).id;
       }
       local.setItem(K.folder, id);
       return (folderId = id);

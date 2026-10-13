@@ -7,7 +7,7 @@
 // Cada cartão diz o que a página é, onde está publicada, quem publicou e qual é o arquivo.
 import { h } from './core/dom.js';
 import { loadUsers, loadConfig } from './core/auth.js';
-import { carregarHost } from './core/host.js';
+import { carregarHost, hostAtual } from './core/host.js';
 import { permissao, resumoDaPlataforma } from './core/permissoes.js';
 import { Store } from './core/store.js';
 import { renderArtboardRecortado, usedFonts } from './core/render.js';
@@ -23,7 +23,7 @@ import { montarGaleria } from './core/galeria.js';
 import { abrirGerador } from './core/gerador-ui.js';
 import { criarMeusModelos, carregarCatalogo } from './core/modelos.js';
 import { getDrive, uploadAll } from './core/drive-ui.js';
-import { FOLDER_NAME, folderUrl, humanSize } from './core/drive.js';
+import { pastaDeMateriais, folderUrl, humanSize } from './core/drive.js';
 
 const $ = (s) => document.querySelector(s);
 const fmtWhen = (iso) => { const d = new Date(iso); return Number.isNaN(+d) ? '' : d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); };
@@ -407,10 +407,10 @@ function cartaoDrive(slug) {
         h('div', { class: 'tit' }, h('h3', {}, 'Materiais no Drive')),
         h('div', { class: 'chips' }, h('span', { class: 'chip tipo-drive' }, 'Google Drive'), h('span', { class: `chip ${conectado ? 'st-publicada' : 'st-inventario'}` }, conectado ? 'Conectado' : 'Não conectado')),
         h('dl', {},
-          linha('O que é', `Imagens, fontes, PSD e PDF que você vai usar nas páginas. Ficam no seu Drive institucional, na pasta “${FOLDER_NAME}”, e aparecem na aba Drive do editor.`),
+          linha('O que é', `Imagens, fontes, PSD e PDF que você vai usar nas páginas. Ficam no seu Drive institucional, na pasta “${pastaDeMateriais(hostAtual()?.marca?.nome)}”, e aparecem na aba Drive do editor.`),
           conectado ? linha('Conta', info.email) : null,
           conectado ? linha('Espaço', info.cota.limite ? `${humanSize(info.cota.usado)} de ${humanSize(info.cota.limite)} usados` : `${humanSize(info.cota.usado)} usados no seu Drive`) : null,
-          conectado ? null : linha('Privacidade', 'O Gehrarte só enxerga o que for enviado por aqui — o resto do seu Drive continua invisível.')),
+          conectado ? null : linha('Privacidade', `O ${hostAtual()?.marca?.nome || 'editor'} só enxerga o que for enviado por aqui — o resto do seu Drive continua invisível.`)),
         msg, progresso),
       h('footer', {},
         conectado

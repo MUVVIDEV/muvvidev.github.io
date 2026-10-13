@@ -29,7 +29,7 @@ export async function fetchPublished(pageId) {
 }
 export const fetchModel = (pageId) => getJson(`${pageDir(pageId)}modelo.json`);
 
-// URL pública de um caminho do site ("home/", "index.html"…), a partir do config.json (siteUrl).
+// URL pública de um caminho do site ("museu/", "index.html"…), a partir do config.json (siteUrl).
 export function publicUrl(cfg, caminho = '') {
   const base = String(cfg?.siteUrl || BASE).replace(/\/+$/, '');
   const c = String(caminho).replace(/^\/+/, '').replace(/index\.html$/, '');

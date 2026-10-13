@@ -1,5 +1,5 @@
 // Menu superior do blog e das ferramentas (compartilhado por home/ e ferramentas/).
-// Uso: <header id="site-nav" data-site-nav data-active="inicio|ferramentas" data-next="home/"></header>
+// Uso: <header id="site-nav" data-site-nav data-active="inicio|acervo|ferramentas" data-next="museu/"></header>
 //   data-next: para onde o Login volta depois de entrar (caminho relativo à raiz do site).
 import { h } from './core/dom.js';
 import { session, logout } from './core/auth.js';
@@ -10,7 +10,7 @@ const el = document.querySelector('[data-site-nav]');
 
 function build(host) {
   const active = host.dataset.active || '';
-  const next = host.dataset.next || 'home/';
+  const next = host.dataset.next || 'museu/';
   const sess = session();
 
   const link = (label, href, key) => h('li', {}, h('a', { href: U(href), 'aria-current': key && key === active ? 'page' : null }, label));
@@ -28,12 +28,11 @@ function build(host) {
   dd.append(ddBtn, sub);
 
   const links = h('ul', { class: 'sn-links' },
-    link('Início', 'home/', 'inicio'),
-    link('Museu', 'museu/'),
-    link('Acervo', 'home/#artigos'),
-    link('Páginas', 'home/#paginas'),
+    link('Início', 'museu/', 'inicio'),
+    link('Acervo', 'acervo/#artigos', 'acervo'),
+    link('Páginas', 'acervo/#paginas'),
     link('Mapa', 'mapa/'),
-    link('Sobre', 'home/#sobre'),
+    link('Sobre', 'acervo/#sobre'),
     dd);
 
   // ---- Login / Meu espaço ----
@@ -51,7 +50,7 @@ function build(host) {
   const burger = h('button', { class: 'sn-burger', type: 'button', 'aria-label': 'Abrir menu', 'aria-expanded': 'false', 'aria-controls': 'sn-menu' }, h('span'));
   host.className = 'sn';
   host.replaceChildren(h('div', { class: 'sn-in' },
-    h('a', { class: 'sn-brand', href: U('home/'), 'aria-label': 'MUVVI — início' }, h('img', { src: U('assets/logo/muvvi.webp'), alt: '', width: 117, height: 34 })),
+    h('a', { class: 'sn-brand', href: U('museu/'), 'aria-label': 'MUVVI — início' }, h('img', { src: U('assets/logo/muvvi.webp'), alt: '', width: 117, height: 34 })),
     menu, burger));
 
   // ---- comportamento ----
@@ -91,7 +90,7 @@ function build(host) {
   menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });   // âncora na mesma página: fecha o menu
   addEventListener('resize', () => { if (innerWidth > 900) setMenu(false); });
 
-  // sublinha a seção da página em que se está (home/): Artigos, Páginas, Exposições, Sobre
+  // sublinha a seção da página em que se está (acervo/): Artigos, Páginas, Exposições, Sobre
   const secs = ['artigos', 'paginas', 'exposicoes', 'sobre'];
   if (active === 'inicio' && 'IntersectionObserver' in window) {
     const anchors = Object.fromEntries(secs.map((s) => [s, links.querySelector(`a[href$="#${s}"]`)]));

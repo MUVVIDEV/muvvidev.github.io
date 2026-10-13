@@ -1,6 +1,10 @@
 {
   "repo": "MUVVIDEV/muvvi-site",
   "branch": "main",
+  "host": "muvvi",
+  "marca": {
+    "nome": "MUVVI"
+  },
   "googleClientId": "936653344522-5lmtpcr2ce1cn5q4av05kft0ve9k9fer.apps.googleusercontent.com",
   "loginSenha": false,
   "siteUrl": "https://muvvidev.github.io",

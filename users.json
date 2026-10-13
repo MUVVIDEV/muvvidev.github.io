@@ -1,5 +1,13 @@
 [
   {
+    "slug": "leilane",
+    "nome": "Leilane Patricia de Lima",
+    "emailHash": "efbc5b111dc882375ff0d1a9383e112597eac98a446f05ad9e5ca3afbd0976dc",
+    "funcoes": [
+      "site"
+    ]
+  },
+  {
     "slug": "adryan",
     "nome": "Adryan Andreoli",
     "emailHash": "44152bea75707205da9a01209046a5ae10bdd0404560b8785f19af631d499bfd",

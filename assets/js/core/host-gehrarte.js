@@ -7,7 +7,7 @@ import { canEditSite } from './site.js';
 export function criarHostGehrarte(cfg = {}) {
   return {
     id: 'gehrarte',
-    marca: { nome: 'Gehrarte', editor: 'ArtAtk' },
+    marca: { nome: cfg.marca?.nome || 'Gehrarte', editor: 'ArtAtk' },
     // config.json "publicar": false = modo teste (nada vai ao GitHub; tudo fica neste computador)
     capacidades: { drive: true, publicar: cfg.publicar !== false, paginasDoSite: true, perfisDaEquipe: true, modelos: true },
     async identidade() {

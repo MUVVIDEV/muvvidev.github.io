@@ -1,11 +1,11 @@
-// Aba "Drive" da biblioteca: os materiais da pessoa, na pasta "Gehrarte — materiais" do Google Drive dela.
+// Aba "Drive" da biblioteca: os materiais da pessoa, na pasta de materiais do site ("MUVVI — materiais") do Google Drive dela.
 // Enviar (botão ou arrastar), ver, inserir imagem na página, importar projeto (.json) e abrir o resto no Drive.
 import { h } from '../core/dom.js';
 import { S } from './state.js';
 import { btn, toast } from './ui.js';
 import { icon } from './icons.js';
 import { getDrive, uploadAll } from '../core/drive-ui.js';
-import { FOLDER_NAME, folderUrl, humanSize, isImage, isProject } from '../core/drive.js';
+import { pastaDeMateriais, folderUrl, humanSize, isImage, isProject } from '../core/drive.js';
 import { insertImageFile } from './tools.js';
 import { importProject } from './publish.js';
 import { NOME_ARQUIVO } from '../core/preferencias.js';
@@ -31,8 +31,8 @@ export function driveTab(body) {
   function disconnected(erro) {
     view.replaceChildren(
       h('div', { class: 'pad drv-intro' },
-        h('p', {}, h('b', {}, 'Seus materiais, sempre à mão.'), ' Imagens, fontes, PSD e PDF ficam no ', h('b', {}, 'seu Google Drive institucional'), `, na pasta “${FOLDER_NAME}” — e aparecem aqui enquanto você edita.`),
-        h('p', { class: 'hint' }, 'O Gehrarte só enxerga o que for enviado por aqui. O resto do seu Drive continua invisível para o site.'),
+        h('p', {}, h('b', {}, 'Seus materiais, sempre à mão.'), ' Imagens, fontes, PSD e PDF ficam no ', h('b', {}, 'seu Google Drive institucional'), `, na pasta “${pastaDeMateriais(S.host?.marca?.nome)}” — e aparecem aqui enquanto você edita.`),
+        h('p', { class: 'hint' }, `O ${S.host?.marca?.nome || 'editor'} só enxerga o que for enviado por aqui. O resto do seu Drive continua invisível para o site.`),
         erro ? h('p', { class: 'hint bad' }, erro) : null,
         btn({ label: drive?.wasConnected() ? 'Reconectar ao Drive' : 'Conectar ao Google Drive', ic: 'cloud', cls: 'primary', onClick: connect })));
   }

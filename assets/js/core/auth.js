@@ -55,7 +55,7 @@ export async function loginWithGoogle(credential, clientId, verify = verifyGoogl
   const pl = await verify(credential, clientId);
   const h = await hashEmail(pl.email);
   const u = (await loadUsers()).find((x) => x.emailHash === h);
-  if (!u) throw new Error('Este e-mail do Google não está liberado no Gehrarte. Fale com o administrador.');
+  if (!u) throw new Error(`Este e-mail do Google não está liberado no ${(await loadConfig().catch(() => ({})))?.marca?.nome || 'Gehrarte'}. Fale com o administrador.`);
   const s = { slug: u.slug, nome: u.nome, via: 'google', exp: Date.now() + DAYS * 864e5 };
   localStorage.setItem(SKEY, JSON.stringify(s));
   return s;

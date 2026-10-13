@@ -1,22 +1,24 @@
 // Landing: (1) o botão vira "Entrar" (direto para o blog) quando já existe sessão válida; (2) nada rola:
 // o texto provisório (e o oficial, depois) encolhe a fonte até caber no painel.
-import { session } from './core/auth.js';
+import { session, loadConfig } from './core/auth.js';
 import { mountPublished } from './core/embed.js';
 
 // Se alguém publicou a landing pelo editor (paginas/landing/page.json), ela substitui o painel original.
+// Nome do site (config.json › marca.nome): o mesmo código serve ao Gehrarte e ao MUVVI.
+const MARCA = (await loadConfig().catch(() => ({})))?.marca?.nome || 'Gehrarte';
 const host = document.getElementById('pagina-site');
 try {
   host.hidden = false;
   const doc = await mountPublished(host, 'landing', { modo: 'tela', onBg: (bg) => { document.body.style.background = bg; } });
-  if (doc) { document.body.classList.add('landing-doc'); document.title = `${doc.title || 'Gehrarte'} — Gehrarte`; }
+  if (doc) { document.body.classList.add('landing-doc'); document.title = `${doc.title || MARCA} — ${MARCA}`; }
   else host.hidden = true;
 } catch { host.hidden = true; }
 document.documentElement.classList.remove('chk');
 
 const a = document.getElementById('entrar');
 if (a && session()) {
-  a.href = 'home/';
-  a.setAttribute('aria-label', 'Entrar no blog do Gehrarte');
+  a.href = 'museu/';
+  a.setAttribute('aria-label', `Entrar no ${MARCA}`);
   a.querySelector('.rot').textContent = 'Entrar';
 }
 

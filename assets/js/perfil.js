@@ -89,7 +89,7 @@ function desenharFolha(view) {
   root.append(stage);
   let pg = document.getElementById('pg'); if (!pg) { pg = document.createElement('style'); pg.id = 'pg'; document.head.append(pg); }
   pg.textContent = cssPagina(f.folha);
-  document.title = `${doc.title || 'Arquivo'} — Gehrarte`;
+  document.title = `${doc.title || 'Arquivo'} — ${MARCA}`;
   return 'd';
 }
 
@@ -116,7 +116,7 @@ function draw() {
   root.append(stage);
   observeEntrances(root);
   const aba = view.kind === 'site' ? view.abas.find((a) => a.id === view.abaAtiva) : null;
-  document.title = aba ? `${aba.titulo} — ${doc.title || 'Site'}` : `${doc.title || 'Página'} — Gehrarte`;
+  document.title = aba ? `${aba.titulo} — ${doc.title || 'Site'}` : `${doc.title || 'Página'} — ${MARCA}`;
   loadFonts(usedFonts(view));
   if (modoPdf) {
     let pg = document.getElementById('pg'); if (!pg) { pg = document.createElement('style'); pg.id = 'pg'; document.head.append(pg); }
@@ -147,6 +147,8 @@ function toolbar(dev) {
 //   · ?leitura=1  teste do autor (painel ao vivo, sem enviar nada);
 //   · visitantes: só com destino em config.json › medicao.url, fora do rascunho, do embutido e do "não rastrear".
 let controladores = [], configSite = null;
+// Nome do site para o título da aba (config.json › marca.nome): o mesmo visualizador serve ao Gehrarte e ao MUVVI.
+let MARCA = 'Gehrarte';
 async function ligarControladores(dev) {
   controladores.forEach((c) => c.parar()); controladores = [];
   const view = vista(), teste = q.get('leitura') === '1', publico = !teste && q.get('src') !== 'draft' && !q.get('embed');
@@ -155,6 +157,9 @@ async function ligarControladores(dev) {
   controladores.push(iniciarRolagem(root, view, { dev }));
   if (teste || destino) controladores.push(iniciarLeitura(root, view, { modo: teste ? 'teste' : 'visitante', dev, destino, pagina: { id: doc.id, kind: doc.kind } }));
 }
+
+configSite = await fetch(`${BASE}config.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+MARCA = configSite?.marca?.nome || MARCA;
 
 try {
   await load();

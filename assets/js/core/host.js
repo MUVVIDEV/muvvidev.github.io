@@ -81,12 +81,14 @@ export function definirHost(h) {
 export const hostAtual = () => atual;
 export const _zerarHost = () => { atual = null; };   // só para testes
 
-// Resolve o host da página: o injetado (window.ARTATK_HOST) ou, pela config.json do site, o local ou o do Gehrarte.
+// Resolve o host da página: o injetado (window.ARTATK_HOST) ou, pela config.json do site ("host"), um dos hosts
+// conhecidos. Sem "host" declarado vale o do Gehrarte, que foi o primeiro e segue sendo o padrão.
 // `carregarConfig` é injetado para manter este arquivo sem rede.
 export async function carregarHost({ carregarConfig, global = globalThis } = {}) {
   if (atual) return atual;
   if (global.ARTATK_HOST) return definirHost(global.ARTATK_HOST);
   const cfg = (await carregarConfig?.()) || {};
   if (cfg.host === 'local') return definirHost((await import('./host-local.js')).criarHostLocal(cfg));
+  if (cfg.host === 'muvvi') return definirHost((await import('./host-muvvi.js')).criarHostMuvvi(cfg));
   return definirHost((await import('./host-gehrarte.js')).criarHostGehrarte(cfg));
 }
