@@ -4,6 +4,7 @@ import { h } from '../core/dom.js';
 import { S, on, emit, loadDoc, saveNow, commit } from './state.js';
 import { abrirAba, adicionarAba, renomearAba, removerAba, moverAba, duplicarAba } from '../core/sites.js';
 import { btn, modal, toast } from './ui.js';
+import { temAbas } from '../core/model.js';
 
 let bar;
 
@@ -47,7 +48,7 @@ function menuDaAba(ancora) {
 
 function render() {
   if (!bar || !S.doc) return;
-  bar.hidden = S.doc.kind !== 'site';
+  bar.hidden = !temAbas(S.doc);
   if (bar.hidden) return;
   const mais = h('button', { class: 'ab ab-mais', title: 'Opções da aba aberta', 'aria-label': 'Opções da aba aberta', onclick: (e) => menuDaAba(e.currentTarget) }, '⋯');
   bar.replaceChildren(

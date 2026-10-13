@@ -7,7 +7,7 @@
 // A especificação (spec) é uma descrição declarativa de seções (topo, hero, cards…) que o gerador converte nos
 // elementos do canvas, com layout de PC (1200) e de celular (390). É por ela que se produz um modelo novo a
 // partir de um briefing — por exemplo, o do setor de design do MUVVI — sem desenhar elemento por elemento.
-import { newDoc, makeElement, W, garantirSite, ABAS_PADRAO } from './model.js';
+import { newDoc, makeElement, W, garantirSite, ABAS_PADRAO, temAbas } from './model.js';
 import { guardarAbaAtual, carregarAbaAtiva, docDeAba } from './sites.js';
 import { uid, clone } from './util.js';
 
@@ -76,7 +76,7 @@ function semImagem(e, avisos) {
 export function modeloDeDoc(doc, meta = {}) {
   const avisos = [];
   let d;
-  if (doc.kind === 'site') {
+  if (temAbas(doc)) {
     const c = clone(doc); garantirSite(c); guardarAbaAtual(c);
     d = { kind: 'site', abaAtiva: c.abaAtiva, comum: { hRef: c.comum.hRef, elements: c.comum.elements.map((e) => semImagem(e, avisos)) },
       abas: c.abas.map((a) => ({ id: a.id, nome: a.nome, titulo: a.titulo, page: a.page, elements: a.elements.map((e) => semImagem(e, avisos)) })) };
@@ -117,12 +117,12 @@ export function conteudoDoModelo(modelo) {
 export function aplicarModeloAoDoc(doc, modelo) {
   const c = conteudoDoModelo(modelo);
   if (c.site) {
-    if (doc.kind !== 'site' && doc.kind !== 'artigo') return false;
+    if (!['site', 'artigo', 'pagina'].includes(doc.kind)) return false;   // a página do site também aceita modelo de site
     doc.kind = 'site'; doc.abas = c.abas; doc.comum = c.comum; doc.abaAtiva = c.abaAtiva;
     carregarAbaAtiva(doc);
     return true;
   }
-  if (doc.kind === 'site') { const comuns = doc.elements.filter((e) => e.comum); doc.elements = [...c.elements, ...comuns]; }
+  if (temAbas(doc)) { const comuns = doc.elements.filter((e) => e.comum); doc.elements = [...c.elements, ...comuns]; }
   else doc.elements = c.elements;
   doc.page = c.page;
   return true;

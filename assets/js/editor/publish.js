@@ -8,7 +8,7 @@ import { urlDasFontes } from '../core/fonts.js';
 import { montarHtml, nomeDoArquivoHtml } from '../core/exportar-html.js';
 import { Store } from '../core/store.js';
 import { S, saveNow, emit } from './state.js';
-import { normalizeDoc, PROFILE_ID, publishDir, viewerQuery, publisherName, KINDS, NAO_PUBLICAVEIS, pageW, pageH, bgCss, ehUnico } from '../core/model.js';
+import { normalizeDoc, PROFILE_ID, publishDir, viewerQuery, publisherName, KINDS, NAO_PUBLICAVEIS, pageW, pageH, bgCss, ehUnico, temAbas } from '../core/model.js';
 import { goToDoc } from './nav.js';
 import { publishedUrl, siteHost } from '../core/site.js';
 import { createPublicador } from '../core/publicador.js';
@@ -18,7 +18,7 @@ import { btn, modal, toast } from './ui.js';
 import { icon } from './icons.js';
 
 // imagens usadas pelo documento (num projeto de site, por todas as abas e pelos compartilhados)
-const usedAssetIds = () => [...new Set((S.doc.kind === 'site' ? todosOsElementos(S.doc) : S.doc.elements).filter((e) => e.t === 'image' && e.asset).map((e) => e.asset))];
+const usedAssetIds = () => [...new Set((temAbas(S.doc) ? todosOsElementos(S.doc) : S.doc.elements).filter((e) => e.t === 'image' && e.asset).map((e) => e.asset))];
 
 // ---------- exportar / importar (backup) ----------
 export async function buildProject() {
@@ -28,7 +28,7 @@ export async function buildProject() {
     if (a) assets[id] = { ext: a.ext, mime: a.mime, w: a.w, h: a.h, data: await blobToDataURL(a.blob) };
   }
   let doc = S.doc;
-  if (doc.kind === 'site') { doc = JSON.parse(JSON.stringify(doc)); guardarAbaAtual(doc); }   // abas e compartilhados em dia
+  if (temAbas(doc)) { doc = JSON.parse(JSON.stringify(doc)); guardarAbaAtual(doc); }   // abas e compartilhados em dia
   return { format: 'gehrarte-projeto', v: 2, slug: S.slug, id: S.doc.id, kind: S.doc.kind, doc, assets };
 }
 
@@ -41,7 +41,7 @@ export async function exportProject() {
 export async function exportHtml() {
   await saveNow();
   const doc = S.doc;
-  const paginas0 = doc.kind === 'site' ? todasAsPaginas(doc) : [{ id: 'pagina', titulo: doc.title || 'Página', doc }];
+  const paginas0 = temAbas(doc) ? todasAsPaginas(doc) : [{ id: 'pagina', titulo: doc.title || 'Página', doc }];
   const urls = new Map();                                            // imagens embutidas (data:), de todas as abas
   for (const id of usedAssetIds()) { const a = S.assets.get(id); if (a) urls.set(id, await blobToDataURL(a.blob)); }
   const assetUrl = (id) => urls.get(id) || null;
@@ -56,7 +56,7 @@ export async function exportHtml() {
     return { id, titulo, bg: bgCss(d.page.bg), dispositivos };
   });
   const css = (await Promise.all(['anim.css', 'viewer.css'].map((f) => fetch(`${BASE}assets/css/${f}`).then((r) => (r.ok ? r.text() : '')).catch(() => '')))).join('\n');
-  const html = montarHtml({ titulo: doc.title || 'Página', nome: doc.kind === 'site' ? doc.title || '' : '', paginas, css, fontes: urlDasFontes([...nomes]) });
+  const html = montarHtml({ titulo: doc.title || 'Página', nome: temAbas(doc) ? doc.title || '' : '', paginas, css, fontes: urlDasFontes([...nomes]) });
   downloadBlob(nomeDoArquivoHtml(S.slug, doc), new Blob([html], { type: 'text/html;charset=utf-8' }));
   return { paginas: paginas.length, bytes: html.length };
 }

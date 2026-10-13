@@ -3,7 +3,7 @@
 // <foreignObject> e pinta esse SVG num canvas. As contas e a reescrita de CSS estão em core/exportar-png.js (puras e testadas).
 import { h } from '../core/dom.js';
 import { BASE, downloadBlob } from '../core/util.js';
-import { viewerQuery, ehFixa, ehUnico } from '../core/model.js';
+import { viewerQuery, ehFixa, ehUnico, temAbas } from '../core/model.js';
 import { urlImpressao, tamanhoPagina, folhaPdf } from '../core/pdf.js';
 import { sangriaMm } from '../core/gabarito.js';
 import { rotuloDaPagina } from '../core/formatos.js';
@@ -97,7 +97,7 @@ export async function elementoParaCanvas(alvo, { escala = 1, transparente = fals
 
 // Abre a página no visualizador (iframe escondido), espera ficar pronta e devolve { quadro, remover }.
 async function abrirVisualizador({ dev, sangria }) {
-  const t = S.doc.kind === 'site' ? S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.id : null;
+  const t = temAbas(S.doc) ? S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.id : null;
   const src = urlImpressao({ base: new URL(BASE, location.href).href, query: viewerQuery(S.slug, S.doc), dev, rascunho: true, auto: false, sangria, marcas: false, aba: t });
   const ifr = document.createElement('iframe');
   Object.assign(ifr.style, { position: 'fixed', left: '-30000px', top: '0', width: '1280px', height: '800px', border: '0', visibility: 'hidden' });
@@ -162,7 +162,7 @@ export function openExportPng() {
     corpo.push(h('p', { class: 'hint' }, 'Versão da página:'), seg({ value: dev, options: [['d', icon('monitor') + ' Computador', 'Layout de PC (1200 px)'], ['m', icon('phone') + ' Celular', 'Layout de celular (390 px)']], onChange: (v) => { dev = v; atualiza(); } }));
   }
   corpo.push(h('p', { class: 'hint' }, papel ? 'Resolução:' : 'Tamanho:'), corpoEscala, corpoOpc, info, aviso);
-  if (S.doc.kind === 'site') corpo.push(h('p', { class: 'hint' }, `Projeto de site: sai a aba aberta (“${S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.nome || ''}”).`));
+  if (temAbas(S.doc)) corpo.push(h('p', { class: 'hint' }, `Projeto de site: sai a aba aberta (“${S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.nome || ''}”).`));
   desenhaEscala(); desenhaOpc(); atualiza();
 
   const gerar = async (e) => {

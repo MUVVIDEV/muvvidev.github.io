@@ -10,7 +10,7 @@
 import { renderArtboard, renderArtboardRecortado, observeEntrances, usedFonts } from './core/render.js';
 import { larguraFinal, alturaFinal } from './core/gabarito.js';
 import { loadFonts } from './core/fonts.js';
-import { W, pageH, pageW, ehUnico, ehFixa, bgCss } from './core/model.js';
+import { W, pageH, pageW, ehUnico, ehFixa, bgCss, temAbas } from './core/model.js';
 import { Store } from './core/store.js';
 import { docDeAba, abaDoHash } from './core/sites.js';
 import { BASE } from './core/util.js';
@@ -52,7 +52,7 @@ async function load() {
 
 // Projeto de site: a página exibida é a aba do endereço (#/<aba>; sem hash, a primeira) + o topo e o rodapé compartilhados.
 function vista() {
-  if (doc.kind !== 'site') return doc;
+  if (!temAbas(doc)) return doc;
   const id = abaDoHash(location.hash, doc) || doc.abas[0].id;
   return docDeAba(doc, id);
 }
@@ -115,7 +115,7 @@ function draw() {
   root.innerHTML = '';
   root.append(stage);
   observeEntrances(root);
-  const aba = view.kind === 'site' ? view.abas.find((a) => a.id === view.abaAtiva) : null;
+  const aba = temAbas(view) ? view.abas.find((a) => a.id === view.abaAtiva) : null;
   document.title = aba ? `${aba.titulo} — ${doc.title || 'Site'}` : `${doc.title || 'Página'} — ${MARCA}`;
   loadFonts(usedFonts(view));
   if (modoPdf) {
@@ -180,7 +180,7 @@ try {
     let t;
     addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { dev = draw(); toolbar(dev); ligarControladores(dev); }, 120); });
     // navegação entre abas do projeto de site
-    addEventListener('hashchange', () => { if (doc.kind === 'site') { dev = draw(); toolbar(dev); scrollTo(0, 0); ligarControladores(dev); } });
+    addEventListener('hashchange', () => { if (temAbas(doc)) { dev = draw(); toolbar(dev); scrollTo(0, 0); ligarControladores(dev); } });
   }
 } catch (e) {
   msg(e.message);

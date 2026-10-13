@@ -5,7 +5,7 @@
 //   · papel (A5, A4…): o papel final, ou "para gráfica" (com a sangria) e, opcionalmente, MARCAS DE CORTE nos 4 cantos.
 import { h } from '../core/dom.js';
 import { BASE } from '../core/util.js';
-import { viewerQuery, pageH, ehFixa, ehUnico } from '../core/model.js';
+import { viewerQuery, pageH, ehFixa, ehUnico, temAbas } from '../core/model.js';
 import { tamanhoPagina, folhaPdf, urlImpressao, ALTURA_MAX } from '../core/pdf.js';
 import { sangriaMm, margemMm, avisosDeImpressao } from '../core/gabarito.js';
 import { imagensDeBaixaResolucao } from '../core/resolucao.js';
@@ -51,7 +51,7 @@ export function openExportPdf() {
     corpo.push(h('p', { class: 'hint' }, 'Versão da página:'), seg({ value: dev, options: [['d', icon('monitor') + ' Computador', 'Layout de PC (1200 px)'], ['m', icon('phone') + ' Celular', 'Layout de celular (390 px)']], onChange: (v) => { dev = v; atualiza(); } }));
   }
   corpo.push(info, avisos);
-  if (S.doc.kind === 'site') corpo.push(h('p', { class: 'hint' }, `Projeto de site: sai a aba aberta (“${S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.nome || ''}”). Para as outras, abra cada aba e exporte de novo.`));
+  if (temAbas(S.doc)) corpo.push(h('p', { class: 'hint' }, `Projeto de site: sai a aba aberta (“${S.doc.abas.find((a) => a.id === S.doc.abaAtiva)?.nome || ''}”). Para as outras, abra cada aba e exporte de novo.`));
   atualiza();
 
   const gerar = async () => {
@@ -60,7 +60,7 @@ export function openExportPdf() {
     if (!aba) return toast('O navegador bloqueou a nova aba. Libere pop-ups para este site e tente de novo.', 'err');
     try {
       await saveNow();
-      aba.location.href = urlImpressao({ base: new URL(BASE, location.href).href, query: viewerQuery(S.slug, S.doc), dev, rascunho: true, auto: true, sangria: papel && comSangria, marcas: papel && marcas, aba: S.doc.kind === 'site' ? S.doc.abaAtiva : null });
+      aba.location.href = urlImpressao({ base: new URL(BASE, location.href).href, query: viewerQuery(S.slug, S.doc), dev, rascunho: true, auto: true, sangria: papel && comSangria, marcas: papel && marcas, aba: temAbas(S.doc) ? S.doc.abaAtiva : null });
       m.close();
     } catch (e) { aba.close(); toast('Não consegui preparar o PDF: ' + (e?.message || e), 'err'); }
   };

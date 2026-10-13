@@ -21,6 +21,11 @@ export const KINDS = { perfil: 'Página de perfil', artigo: 'Artigo', arquivo: '
 // Tipos que o Publicador do Gehrarte NÃO publica (saem por exportar ou pelas ações do host).
 export const NAO_PUBLICAVEIS = ['site', 'arquivo'];
 export const PROFILE_ID = 'perfil';
+// Um documento TEM ABAS quando guarda a estrutura de projeto de site (`doc.abas`). Vale para o kind
+// 'site' (o projeto da pessoa) e para uma PÁGINA DO SITE montada com abas — é assim que o museu do
+// MUVVI existe: da casa (kind 'pagina': publicável, compartilhada, com controle de conflito) e
+// navegável por abas. Quem depende da ESTRUTURA pergunta por aqui; quem depende do TIPO olha o kind.
+export const temAbas = (doc) => Array.isArray(doc?.abas) && doc.abas.length > 0;
 export const SITE_PREFIX = 'site-';
 export const siteDocId = (pageId) => SITE_PREFIX + pageId;
 export const isSiteId = (id) => typeof id === 'string' && id.startsWith(SITE_PREFIX);
@@ -45,7 +50,7 @@ export function normalizeDoc(doc, owner = '') {
   }
   if (owner && !doc.owner) doc.owner = owner;
   doc.assets ||= {};
-  if (doc.kind === 'site') garantirSite(doc);
+  if (doc.kind === 'site' || temAbas(doc)) garantirSite(doc);   // a página do site com abas também precisa
   return doc;
 }
 

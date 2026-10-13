@@ -1,7 +1,7 @@
 // Painel direito: propriedades contextuais do que está selecionado (ou da página).
 import { h } from '../core/dom.js';
 import { debounce, round } from '../core/util.js';
-import { W, K, frameOf, setFrame, pageH, fontOwner, DEV_LABEL, ABAS_PADRAO, ehUnico, ehFixa } from '../core/model.js';
+import { W, K, frameOf, setFrame, pageH, fontOwner, DEV_LABEL, ABAS_PADRAO, ehUnico, ehFixa, temAbas } from '../core/model.js';
 import { rotuloDaPagina } from '../core/formatos.js';
 import { medidasDoFrame } from '../core/reguas.js';
 import { sangriaMm, margemMm, sangriaPx, aplicarSangria, aplicarMargem, avisosDeImpressao, SANGRIA_GRAFICA_MM, MARGEM_SEGURA_MM } from '../core/gabarito.js';
@@ -217,7 +217,7 @@ function secSvg() {
 }
 
 // ---------- projeto de site: barra de abas, compartilhar entre abas e link para aba ----------
-const eSite = () => S.doc?.kind === 'site';
+const eSite = () => temAbas(S.doc);
 const cfgAbas = (e) => ({ ...ABAS_PADRAO, ...(e.abas || {}) });
 const setAbas = (patch) => set((e) => { e.abas = { ...cfgAbas(e), ...patch }; });
 

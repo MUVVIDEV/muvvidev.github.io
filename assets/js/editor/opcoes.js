@@ -19,7 +19,7 @@ import { openExportPng } from './png.js';
 import { exportProject, exportHtml, importProject, buildProject } from './publish.js';
 import { saveCopyToDrive } from './drive.js';
 import { reguasVisiveis, alternarReguas, gradeAtual, alternarGrade } from './reguas.js';
-import { viewerQuery } from '../core/model.js';
+import { viewerQuery, temAbas } from '../core/model.js';
 import { BASE } from '../core/util.js';
 
 const lerLS = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
@@ -97,7 +97,7 @@ export function abrirOpcoes(ancora) {
     '-',
     { label: 'Salvar em PDF…', icon: 'download', onClick: openExportPdf },
     { label: 'Exportar como imagem (PNG)…', icon: 'image', onClick: openExportPng },
-    { label: S.doc?.kind === 'site' ? 'Exportar site em HTML (.html)' : 'Exportar página em HTML (.html)', icon: 'code', onClick: exportarHtml },
+    { label: temAbas(S.doc) ? 'Exportar site em HTML (.html)' : 'Exportar página em HTML (.html)', icon: 'code', onClick: exportarHtml },
     { label: 'Exportar projeto (.json)', icon: 'download', onClick: () => exportProject() },
     { label: 'Importar projeto…', icon: 'upload', onClick: importar },
     ...(S.host?.capacidades.drive ? [{ label: 'Salvar cópia no Drive', icon: 'cloud', onClick: copiarParaDrive }] : []),

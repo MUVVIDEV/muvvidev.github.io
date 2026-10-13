@@ -1,7 +1,7 @@
 // Ferramentas da biblioteca, cada uma um painel do dock: elementos, SVGs animados, mídia, Drive e modelos.
 import '../core/migracao.js';
 import { h } from '../core/dom.js';
-import { makeElement, K, W } from '../core/model.js';
+import { makeElement, K, W, temAbas } from '../core/model.js';
 import { sanitizeSvg } from '../core/sanitize.js';
 import { SHAPE_LIST, shapeSvg } from '../core/render.js';
 import { S, on, emit, commit, select } from './state.js';
@@ -160,7 +160,7 @@ export function initLibraryPanels(roots) {
       })),
       h('p', { class: 'hint pad' }, 'Clique para inserir. Para desenhar no tamanho que quiser, use a ferramenta Forma (R) e arraste no canvas.'),
     ]));
-    if (S.doc?.kind === 'site') {
+    if (temAbas(S.doc)) {
       body.append(grupo('site', 'Projeto de site', h('div', { class: 'pad' }, btn({ label: 'Barra de abas', ic: 'layers', onClick: createAbas }), h('p', { class: 'hint' }, 'Menu funcional: lista as abas do projeto e leva de uma a outra. Para links soltos (cartões, botões), use “Ir para a aba” em Link.'))));
     }
   });
