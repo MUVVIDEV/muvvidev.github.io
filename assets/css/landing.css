@@ -1,4 +1,4 @@
-/* Landing do Gehrarte: um painel só, sem rolagem. Lettering + enfeites de um lado; texto e "Entrar" do outro. */
+/* Capa do MUVVI: um painel só, sem rolagem. Lettering + enfeites de um lado; texto e "Entrar" do outro. */
 :root{ --papel:#f1ead9; --papel-2:#e8dcc1; --tinta:#17161d; --tinta-2:#4f4a40; --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; --pad:clamp(16px,3vw,44px) }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden}
@@ -13,7 +13,7 @@ body.landing{background:var(--papel);color:var(--tinta);font:17px/1.6 var(--font
 .banner{display:grid;place-items:center;min-width:0;min-height:0}
 .mark{position:relative;width:min(100%,calc((100vh - 2 * var(--pad)) * 1314 / 510));width:min(100%,calc((100dvh - 2 * var(--pad)) * 1314 / 510));aspect-ratio:1314/510}
 .mark .word,.mark .orn{position:absolute;inset:0;width:100%;height:100%;display:block}
-/* O NOME SENDO ESCRITO vem do próprio SVG (assets/lettering/gehrarte-escrita.svg): uma máscara anima seguindo o traço da caneta.
+/* A capa mostra a logomarca do museu (assets/logo/muvvi.webp), arte de Adryan Gabriel Santos Andreoli.
    Não há transição aqui — nada de cortina esquerda→direita. Os enfeites entram depois que a escrita termina. */
 .mark .word{object-fit:contain}
 .mark{--escrita:4.6s}   /* duração da escrita no SVG (~4,2 s, letra por letra) + folga */

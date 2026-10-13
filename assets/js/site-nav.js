@@ -51,7 +51,7 @@ function build(host) {
   const burger = h('button', { class: 'sn-burger', type: 'button', 'aria-label': 'Abrir menu', 'aria-expanded': 'false', 'aria-controls': 'sn-menu' }, h('span'));
   host.className = 'sn';
   host.replaceChildren(h('div', { class: 'sn-in' },
-    h('a', { class: 'sn-brand', href: U('home/'), 'aria-label': 'MUVVI — início' }, h('img', { src: U('assets/logo/muvvi.png'), alt: '', width: 117, height: 34 })),
+    h('a', { class: 'sn-brand', href: U('home/'), 'aria-label': 'MUVVI — início' }, h('img', { src: U('assets/logo/muvvi.webp'), alt: '', width: 117, height: 34 })),
     menu, burger));
 
   // ---- comportamento ----

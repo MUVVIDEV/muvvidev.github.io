@@ -14,6 +14,6 @@
   ] },
   { "tipo": "galeria", "titulo": "Galeria", "quantidade": 6, "colunas": 3 },
   { "tipo": "chamada", "titulo": "Vamos conversar?", "texto": "Para encomendas, exposições e parcerias, escreva para mim.", "botao": { "rotulo": "Enviar mensagem", "href": "mailto:" } },
-  { "tipo": "rodape", "texto": "Seu Nome · Artista visual\nFeito no Gehrarte · UEM", "links": ["Instagram", "E-mail"] }
+  { "tipo": "rodape", "texto": "Seu Nome · Artista visual\nFeito no MUVVI · UEM", "links": ["Instagram", "E-mail"] }
  ]
 }

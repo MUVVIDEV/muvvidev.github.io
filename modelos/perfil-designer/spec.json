@@ -19,6 +19,6 @@
    { "titulo": "3 · Entregar", "texto": "Arquivos finais, guia de uso e acompanhamento." }
   ] },
   { "tipo": "chamada", "titulo": "Tem um projeto em mente?", "texto": "Conte o que você precisa e eu respondo em até dois dias úteis.", "botao": { "rotulo": "Escrever agora", "href": "mailto:" } },
-  { "tipo": "rodape", "texto": "Seu Nome · Designer\nFeito no Gehrarte · UEM", "links": ["Behance", "Instagram", "E-mail"] }
+  { "tipo": "rodape", "texto": "Seu Nome · Designer\nFeito no MUVVI · UEM", "links": ["Behance", "Instagram", "E-mail"] }
  ]
 }

@@ -19,6 +19,6 @@
    { "titulo": "Título do artigo ou texto", "texto": "Revista ou veículo, ano. Resumo em uma linha." }
   ] },
   { "tipo": "chamada", "titulo": "Vamos trocar ideias", "texto": "Para convites, colaborações e perguntas sobre os textos, escreva.", "botao": { "rotulo": "Entrar em contato", "href": "mailto:" } },
-  { "tipo": "rodape", "texto": "Seu Nome · Pesquisa e escrita\nFeito no Gehrarte · UEM", "links": ["Lattes", "E-mail"] }
+  { "tipo": "rodape", "texto": "Seu Nome · Pesquisa e escrita\nFeito no MUVVI · UEM", "links": ["Lattes", "E-mail"] }
  ]
 }

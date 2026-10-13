@@ -12,16 +12,22 @@
   <link rel="stylesheet" href="assets/css/landing.css">
   <!-- esconde o painel original só até sabermos se há uma landing publicada pelo editor (paginas/landing/page.json); 1,5 s no máximo -->
   <script>document.documentElement.classList.add('chk');setTimeout(function(){document.documentElement.classList.remove('chk')},1500)</script>
+  <meta property="og:title" content="MUVVI — Museu Virtual do Vale do Ivaí">
+  <meta property="og:description" content="O patrimônio cultural e natural do Vale do Ivaí, pesquisado e documentado por estudantes de História da UEM.">
+  <meta property="og:image" content="https://muvvidev.github.io/assets/logo/muvvi-compartilhar.jpg">
+  <meta property="og:url" content="https://muvvidev.github.io/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
 </head>
 <body class="landing">
   <main class="page">
-    <!-- PAINEL: logomarca do MUVVI, arte de Adryan Gabriel Santos Andreoli (2026). Troque assets/logo/muvvi.png se a arte mudar. -->
+    <!-- PAINEL: logomarca do MUVVI, arte de Adryan Gabriel Santos Andreoli (2026). Troque assets/logo/muvvi.webp se a arte mudar. -->
     <section class="banner" aria-label="MUVVI">
       <div class="mark">
         <h1 class="sr-only">MUVVI — Museu Virtual do Vale do Ivaí</h1>
         <!-- Logomarca do MUVVI: cada letra ilustrada com referências culturais do Vale.
              Arte de Adryan Gabriel Santos Andreoli (2026). Fundo removido do arquivo original. -->
-        <img class="word" src="assets/logo/muvvi.png" alt="MUVVI — Museu Virtual do Vale do Ivaí" width="1031" height="299" decoding="async">
+        <img class="word" src="assets/logo/muvvi.webp" alt="MUVVI — Museu Virtual do Vale do Ivaí" width="1031" height="299" decoding="async">
       </div>
     </section>
 
