@@ -38,10 +38,15 @@ export function guardarAbaAtual(doc) {
   garantirSite(doc);
   const aba = abaDe(doc, doc.abaAtiva);
   const comuns = doc.elements.filter((e) => e.comum), proprios = doc.elements.filter((e) => !e.comum);
+  // Ordem de empilhamento: para cada elemento próprio, quantos compartilhados ficam ABAIXO dele (lista paralela a aba.elements).
+  // Sem isso uma imagem posta por cima do topo voltava para trás dele ao trocar de aba e "sumia".
+  let abaixo = 0; const zc = [];
+  for (const e of doc.elements) { if (e.comum) abaixo++; else zc.push(abaixo); }
   const guardados = clone(comuns);
   deslocar(guardados, -(doc.page.h.d - doc.comum.hRef.d), -(alturaM(doc.page) - doc.comum.hRef.m));
   doc.comum.elements = guardados;
   aba.elements = clone(proprios);
+  aba.zc = zc;
   aba.page = clone(doc.page);
   return doc;
 }
@@ -51,7 +56,14 @@ function carregar(doc, aba) {
   doc.page = clone(aba.page);
   const comuns = clone(doc.comum.elements);
   deslocar(comuns, doc.page.h.d - doc.comum.hRef.d, alturaM(doc.page) - doc.comum.hRef.m);
-  doc.elements = [...clone(aba.elements), ...comuns];
+  // Intercala os próprios entre os compartilhados conforme `zc`; abas antigas (sem `zc`) mantêm tudo atrás dos compartilhados.
+  const proprios = clone(aba.elements), zc = Array.isArray(aba.zc) && aba.zc.length === proprios.length ? aba.zc : null;
+  const out = []; let ci = 0;
+  proprios.forEach((e, i) => {
+    for (const alvo = Math.min(zc ? zc[i] : 0, comuns.length); ci < alvo;) out.push(comuns[ci++]);
+    out.push(e);
+  });
+  doc.elements = [...out, ...comuns.slice(ci)];
 }
 
 // Monta o conjunto de trabalho a partir da aba ativa e dos compartilhados (para um documento recém-criado a partir de um modelo).
