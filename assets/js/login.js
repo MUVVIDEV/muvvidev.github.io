@@ -73,7 +73,7 @@ if (!cfg.googleClientId) {
         catch (ex) { note.textContent = ''; err.textContent = ex.message; if (/não está liberado/.test(ex.message)) oferecerPedido(); }
       },
     });
-    google.accounts.id.renderButton(gbtn, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', locale: 'pt-BR', width: 320 });
+    google.accounts.id.renderButton(gbtn, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', locale: 'pt-BR', width: Math.max(200, Math.min(320, innerWidth - 48 - 40 - 2)) });   // cabe no cartão em telas estreitas
   };
   document.head.append(s);
 }
