@@ -32,6 +32,14 @@
     <button class="btn accent" id="go">Entrar</button>
     <a class="back" href="./">← Voltar para o início</a>
   </form>
+  <!-- aparece só quando o Google confirma um e-mail que ainda não foi liberado -->
+  <section class="card" id="pedido" hidden aria-labelledby="pedido-t">
+    <h1 id="pedido-t">Pedir acesso</h1>
+    <p class="sub">Este e-mail ainda não foi liberado. Se ele for institucional (@uem.br), peça acesso: quem administra o site avalia.</p>
+    <label class="f">Seu nome<input id="pedido-nome" autocomplete="name" maxlength="80"></label>
+    <p class="err" id="pedido-msg" role="status" aria-live="polite"></p>
+    <button class="btn accent" id="pedido-go" type="button">Pedir acesso com o Google</button>
+  </section>
   <script type="module" src="assets/js/login.js"></script>
 </body>
 </html>

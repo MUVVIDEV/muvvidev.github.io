@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../assets/css/anim.css">
   <link rel="stylesheet" href="../assets/css/galeria.css">
   <link rel="stylesheet" href="../assets/css/arquivos.css">
+  <link rel="stylesheet" href="../assets/css/painel.css">
 </head>
 <body class="docs">
   <header class="dtop">
@@ -34,6 +35,12 @@
 
   <main id="conteudo">
     <p class="carregando" id="carregando">Carregando os arquivos…</p>
+
+    <!-- 0. O painel do museu: ArtAtk, Mapa interativo e (só administração) Acessos; preenchido por assets/js/painel.js -->
+    <section class="dsec" id="sec-painel" hidden aria-labelledby="h-painel">
+      <header class="dsec-h"><h2 id="h-painel">Painel</h2><p>As ferramentas do museu num lugar só.</p></header>
+      <div class="painel-grid" id="g-painel" role="list"></div>
+    </section>
 
     <!-- 1. A faixa de começar: Meu espaço (em destaque), Novo arquivo e os últimos editados — numa linha só -->
     <section class="dsec dsec-faixa" id="sec-comecar" aria-labelledby="h-comecar">
@@ -61,5 +68,6 @@
 
   <div id="menu-pop" class="pop" hidden role="menu"></div>
   <script type="module" src="../assets/js/arquivos.js"></script>
+  <script type="module" src="../assets/js/painel.js"></script>
 </body>
 </html>

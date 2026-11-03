@@ -74,5 +74,16 @@ export function createPublicador({
     // { ...alvo, page, assets: {id:{ext,data}}, baseAt, force } → { commit, publishedAt, publishedBy, ... }
     // O mesmo `pedidoId` vai em todas as tentativas: se a 1ª foi executada e só a resposta se perdeu, o servidor devolve o resultado (repetido:true).
     publicar: (pedido) => comRetentativa({ ...pedido, acao: 'publicar', pedidoId: novoId() }),
+    // ---- contas (a regra está em publicador/core.mjs) ----
+    // { liberado, usuario? , pedido?, dominioAceito? }: nunca recusa por falta de conta (a tela decide o que mostrar)
+    acesso: () => comRetentativa({ acao: 'acesso' }),
+    // quem tem e-mail do domínio institucional entra na fila; um administrador aprova
+    solicitar: (nome) => comRetentativa({ acao: 'solicitar', nome }),
+    // só administrador: { pedidos, membros, registro, dominios, funcoes }
+    acessos: () => comRetentativa({ acao: 'acessos' }),
+    // decidir/convidar/revogar NÃO são idempotentes: se a resposta se perder e o cliente repetir, a 2ª tentativa volta 404/409 (a tela recarrega a lista)
+    decidir: (id, decisao, extra = {}) => comRetentativa({ acao: 'decidir', id, decisao, ...extra }),
+    convidar: ({ nome, email, funcoes = [] }) => comRetentativa({ acao: 'convidar', nome, email, funcoes }),
+    revogar: (slug) => comRetentativa({ acao: 'revogar', slug }),
   };
 }

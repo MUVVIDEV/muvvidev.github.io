@@ -14,7 +14,7 @@ export function criarHostGehrarte(cfg = {}) {
       const s = session();
       if (!s) return null;
       const u = (await loadUsers().catch(() => [])).find((x) => x.slug === s.slug);
-      return { slug: s.slug, nome: s.nome, perfil: 'completo', podeSite: canEditSite(u) };
+      return { slug: s.slug, nome: s.nome, perfil: 'completo', podeSite: canEditSite(u), admin: (u?.funcoes || []).includes('admin') };
     },
     // A disposição dos painéis vai para o Google Drive da própria pessoa, num arquivo pequeno na pasta de materiais (escopo drive.file:
     // só o que o ArtAtk criou). Só sincroniza com o Drive conectado nesta sessão; `conectar` abre o login do Google (precisa de um clique).

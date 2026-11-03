@@ -1,0 +1,38 @@
+/* Painel do museu (cartões em /arquivos/) e página de acessos. Usa as variáveis de arquivos.css, então segue o modo noturno. */
+.painel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.pcard{display:flex;flex-direction:column;gap:6px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--tx);text-decoration:none;box-shadow:var(--sombra);transition:box-shadow .15s,transform .15s}
+a.pcard:hover,a.pcard:focus-visible{box-shadow:var(--sombra-alta);transform:translateY(-1px);outline:none}
+a.pcard:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pcard h3{margin:0;font-size:16px}
+.pcard p{margin:0;color:var(--dim);font-size:13.5px;line-height:1.45}
+.pcard .ptag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--neutro-bg);color:var(--neutro)}
+.pcard.p-admin .ptag{background:var(--av-bg);color:var(--av)}
+.pcard.p-off{opacity:.62}
+
+.ac-main{max-width:920px;margin:0 auto;padding:24px 16px 64px;display:grid;gap:22px}
+.ac-main h1{margin:0;font-size:22px}
+.ac-sub{margin:4px 0 0;color:var(--dim);font-size:14px}
+.ac-caixa{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--sombra)}
+.ac-caixa h2{margin:0 0 4px;font-size:16px}
+.ac-vazio{margin:8px 0 0;color:var(--dim);font-size:14px}
+.ac-lista{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:0}
+.ac-item{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center;padding:12px 0;border-top:1px solid var(--linha-leve)}
+.ac-item:first-child{border-top:0}
+.ac-quem strong{display:block;font-size:15px}
+.ac-quem span{color:var(--dim);font-size:13px;word-break:break-all}
+.ac-acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+.ac-acoes label{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--dim)}
+.ac-chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--neutro-bg);color:var(--neutro);margin-right:6px}
+.ac-chip.admin{background:var(--av-bg);color:var(--av)}
+.ac-chip.site{background:var(--t-site-bg);color:var(--t-site)}
+.ac-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;align-items:end;margin-top:10px}
+.ac-form label{display:grid;gap:4px;font-size:13px;color:var(--dim)}
+.ac-form input[type=text],.ac-form input[type=email]{font:inherit;padding:8px 10px;border:1px solid var(--linha-forte);border-radius:8px;background:var(--bg);color:var(--tx)}
+.ac-form .ac-marcas{display:flex;gap:6px 16px;flex-wrap:wrap;align-items:center}
+.ac-form .ac-marcas label{display:inline-flex;flex-direction:row;align-items:center;gap:6px}
+.ac-msg{min-height:1.4em;margin:0;font-size:14px}
+.ac-msg.erro{color:var(--erro)} .ac-msg.ok{color:var(--ok)}
+.ac-registro{font-size:13px;color:var(--dim);display:grid;gap:4px;margin:10px 0 0;padding:0;list-style:none}
+.ac-registro time{color:var(--fraco);margin-right:6px}
+.dbtn.remover{color:var(--erro);border-color:var(--erro);background:transparent}.dbtn.remover:hover{background:var(--erro);color:#fff}
+@media (max-width:560px){.ac-item{grid-template-columns:1fr}.ac-acoes{justify-content:flex-start}}

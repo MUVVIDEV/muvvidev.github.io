@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Acessos — MUVVI</title>
+  <link rel="icon" href="../../assets/logo/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <script>try{var t=localStorage.getItem("artatk.tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.tema=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/css/arquivos.css">
+  <link rel="stylesheet" href="../../assets/css/painel.css">
+</head>
+<body class="docs">
+  <header class="dtop">
+    <a class="dlogo" href="../../museu/" title="MUVVI — voltar ao início"><img src="../../assets/logo/muvvi.webp" alt="MUVVI" width="117" height="34"></a>
+    <span class="dtitle">Acessos</span>
+    <nav class="dnav" aria-label="Navegação">
+      <a href="../">← Arquivos</a>
+      <span class="dquem" id="quem"></span>
+    </nav>
+  </header>
+
+  <main class="ac-main" id="conteudo">
+    <div>
+      <h1>Quem entra no MUVVI</h1>
+      <p class="ac-sub" id="sub">Aprove quem pediu para entrar, libere e-mails e veja quem tem acesso.</p>
+    </div>
+    <p class="ac-msg" id="msg" role="status" aria-live="polite"></p>
+
+    <section class="ac-caixa" id="sec-entrar" hidden>
+      <h2>Confirmar que é você</h2>
+      <p class="ac-vazio">Para administrar, o Google precisa confirmar o seu e-mail agora (vale por cerca de 1 hora).</p>
+      <p><button class="dbtn primario" id="entrar" type="button">Confirmar com o Google</button></p>
+    </section>
+
+    <div id="painel" hidden>
+      <section class="ac-caixa" aria-labelledby="h-pedidos">
+        <h2 id="h-pedidos">Pedidos esperando</h2>
+        <p class="ac-sub" id="sub-pedidos"></p>
+        <ul class="ac-lista" id="l-pedidos"></ul>
+      </section>
+
+      <section class="ac-caixa" aria-labelledby="h-liberar" style="margin-top:22px">
+        <h2 id="h-liberar">Liberar um e-mail</h2>
+        <p class="ac-sub">Convite nominal: serve para a equipe e para quem é de fora do e-mail institucional. O e-mail não fica guardado, só o código dele.</p>
+        <form class="ac-form" id="f-convite" autocomplete="off">
+          <label>Nome<input type="text" name="nome" maxlength="80" required></label>
+          <label>E-mail<input type="email" name="email" required></label>
+          <div class="ac-marcas">
+            <label><input type="checkbox" name="site"> pode editar o site</label>
+            <label><input type="checkbox" name="admin"> administra acessos</label>
+          </div>
+          <button class="dbtn primario" type="submit">Liberar</button>
+        </form>
+      </section>
+
+      <section class="ac-caixa" aria-labelledby="h-membros" style="margin-top:22px">
+        <h2 id="h-membros">Quem tem acesso</h2>
+        <p class="ac-sub" id="sub-membros"></p>
+        <ul class="ac-lista" id="l-membros"></ul>
+      </section>
+
+      <section class="ac-caixa" aria-labelledby="h-reg" style="margin-top:22px">
+        <h2 id="h-reg">Últimas decisões</h2>
+        <ul class="ac-registro" id="l-registro"></ul>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="../../assets/js/acessos.js"></script>
+</body>
+</html>

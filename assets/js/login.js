@@ -1,4 +1,5 @@
 import { login, session, loadConfig, loginWithGoogle } from './core/auth.js';
+import { createPublicador } from './core/publicador.js';
 
 // Para onde ir depois de entrar: ?next=<caminho relativo dentro do site>. Qualquer outra coisa (URL, //, :, ..) é ignorada
 // (senão viraria redirecionamento aberto). Sem next: a home do blog.
@@ -34,6 +35,26 @@ const placeholder = (msg) => {
 };
 
 const cfg = await loadConfig();
+
+// ---- Pedir acesso (e-mail institucional) ----
+// O Google já confirmou o e-mail, mas ele não está em users.json. Aqui a pessoa entra na fila; um administrador aprova.
+// Pede um token de acesso (precisa de um clique, por isso é um botão) e o servidor confere o e-mail e o domínio.
+function oferecerPedido() {
+  if (!cfg.publicador) return;
+  const box = document.getElementById('pedido'), nome = document.getElementById('pedido-nome'), msg = document.getElementById('pedido-msg'), btn = document.getElementById('pedido-go');
+  box.hidden = false;
+  btn.onclick = async () => {
+    if (nome.value.trim().length < 2) { msg.textContent = 'Escreva o seu nome.'; nome.focus(); return; }
+    btn.disabled = true; msg.textContent = 'Abrindo o Google…';
+    try {
+      const r = await createPublicador({ url: cfg.publicador, clientId: cfg.googleClientId, slug: 'visitante' }).solicitar(nome.value.trim());
+      msg.textContent = r.liberado ? 'Você já tem acesso: entre de novo com o Google.'
+        : r.jaPedido ? 'O seu pedido já está na fila. Quem administra o site vai avaliar.'
+        : 'Pedido enviado! Quem administra o site vai avaliar. Volte aqui e entre com o Google depois da aprovação.';
+      if (r.liberado) btn.hidden = true;
+    } catch (ex) { msg.textContent = ex.message; btn.disabled = false; }
+  };
+}
 if (!cfg.googleClientId) {
   placeholder('Login com Google em breve — por enquanto use usuário e senha.');
 } else if (!window.isSecureContext) {
@@ -49,7 +70,7 @@ if (!cfg.googleClientId) {
       callback: async ({ credential }) => {
         err.textContent = ''; note.textContent = 'Verificando…';
         try { await loginWithGoogle(credential, cfg.googleClientId); location.href = nextUrl; }
-        catch (ex) { note.textContent = ''; err.textContent = ex.message; }
+        catch (ex) { note.textContent = ''; err.textContent = ex.message; if (/não está liberado/.test(ex.message)) oferecerPedido(); }
       },
     });
     google.accounts.id.renderButton(gbtn, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', locale: 'pt-BR', width: 320 });

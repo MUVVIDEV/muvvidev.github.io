@@ -36,12 +36,123 @@
     "nome": "Nicholas",
     "emailHash": "e71f01a5b7a926537f2e8b8f3bdd1cd5b7e9161fb3439716aa6e2e5c51e48b97",
     "funcoes": [
-      "site"
+      "site",
+      "admin"
     ]
   },
   {
     "slug": "luiz-fernando",
     "nome": "Luiz Fernando",
     "emailHash": "425d96448198e9c9deb11ce6000f03b8e8340bb187e8a09b152f9fc4315b7d3c"
+  },
+  {
+    "slug": "ana",
+    "nome": "Ana Carolina Zanineti Fidelis",
+    "emailHash": "eaae54208c198d11f403710ca18eff08159185ddec29622e89df17c5ae190f34"
+  },
+  {
+    "slug": "andreza",
+    "nome": "Andreza da Silva Vieira",
+    "emailHash": "11629e44e99504d07b05cda0d5b11b2badb27d6dd8458562f7ff02ad09c01a2e"
+  },
+  {
+    "slug": "camila",
+    "nome": "Camila Lourenço Valim",
+    "emailHash": "981755ee0e472b11e2fea78616fcd7fdf4bfbddb7384caec020efe1c461959a7"
+  },
+  {
+    "slug": "daniela",
+    "nome": "Daniela de Oliveira Fagotti",
+    "emailHash": "c68ec00e769bf4db12f9df503fcc55e94ac9b8372b2ca543c5ce33f1aabedcd7"
+  },
+  {
+    "slug": "diego",
+    "nome": "Diego Massaharu Okabayashi",
+    "emailHash": "4976fa386e9f441f357161edd32586f21a57793ab926cfc9e5689aa79ed35227"
+  },
+  {
+    "slug": "dione",
+    "nome": "Dione Canestri da Costa",
+    "emailHash": "23280442695f0e925be7d350602a33c62957cf6a6faa48da0d8fb34b4c80e9bd"
+  },
+  {
+    "slug": "gabriel",
+    "nome": "Gabriel Ranzolin Garcia",
+    "emailHash": "e5c97fcf4f0c32172ed30387a9031cde544f58f3bbb32250d28297e1916bc233"
+  },
+  {
+    "slug": "giovana",
+    "nome": "Giovana Gutierez Nascimento",
+    "emailHash": "b1ac8fed8f90a83b4d52c86341d4e2a3df847a7621d778dd442a64bd8af49994"
+  },
+  {
+    "slug": "giovana-verri",
+    "nome": "Giovana Souza Verri",
+    "emailHash": "dd1792ec1e5afd7906945f7a4980d9f5a68f33b6d055b3ff19714de044c6ec76"
+  },
+  {
+    "slug": "gledson",
+    "nome": "Gledson Kaue Soares Pontes",
+    "emailHash": "b01fe6b0a52f07316185351772b691160bad9a7640101e544c370d43aad03563"
+  },
+  {
+    "slug": "grazielle",
+    "nome": "Grazielle Dantas dos Santos",
+    "emailHash": "09f25f3895d9c33f6cf83c92b961f5073123e6e12dc17f362771c126193f686c"
+  },
+  {
+    "slug": "heloyse",
+    "nome": "Heloyse Casale Campos",
+    "emailHash": "2917b3f8b134e54fb410ce1f4ec9b9f99089e313565dfce63b50f4c49d40aecb"
+  },
+  {
+    "slug": "joice",
+    "nome": "Joice Cristina Gomes da Silva",
+    "emailHash": "e9519b6a65a1e427d93a21dc94e181a7e8c66058a8bdff6a533c03d069cc90ca"
+  },
+  {
+    "slug": "jose",
+    "nome": "José Bernardino da Silva",
+    "emailHash": "5437d8a49b201370220d4910db193de25e156285f17232abda6158e3af9d08f9"
+  },
+  {
+    "slug": "lucas",
+    "nome": "Lucas Gabriel de Lima Alves",
+    "emailHash": "8001f4d5690bc54a496385f017edc43442750b4a5eafa3527eec7278d538a572"
+  },
+  {
+    "slug": "maria",
+    "nome": "Maria Laura de Souza Silva",
+    "emailHash": "20750fffa78bfc29476dfa694b11703554bb1739981b8ba3af88d4fd9ad488b1"
+  },
+  {
+    "slug": "murilo",
+    "nome": "Murilo Tureta Guabiraba",
+    "emailHash": "53eeb6a021986ecf634750264bfc5f1e849e6aaccc18c5644158dfa6405e0dd3"
+  },
+  {
+    "slug": "natalia",
+    "nome": "Natália Granzotto de Camargo",
+    "emailHash": "a2f56e86d4ce87ef952dd1fb10a523939e693cdd00d00cb4e298f3b2ff8b1c16"
+  },
+  {
+    "slug": "samara",
+    "nome": "Samara",
+    "emailHash": "d04363dc1678da1bda6660bcf8d223536b497ff2679aa62bdfca50d46318781d"
+  },
+  {
+    "slug": "thaynara",
+    "nome": "Thaynara Nataly de Oliveira",
+    "emailHash": "e435eaf3c3fa41f02346556a85cdb88165e57a1dfb91fc76e0ca9ddcfd857a18"
+  },
+  {
+    "slug": "ueliton",
+    "nome": "Ueliton Eduardo de Andrade",
+    "emailHash": "80c1c87096687127f5d47c03a5a2a0232580ce90acd100c9cca41136270ff320"
+  },
+  {
+    "slug": "vivian",
+    "nome": "Vivian Fiorese Quennehen",
+    "emailHash": "6e835c90b04e60dd8a6274ff71d9c9856a3b4ea37cec6bc948f68b376674510f"
   }
 ]
