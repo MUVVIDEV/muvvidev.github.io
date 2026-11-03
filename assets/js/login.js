@@ -40,7 +40,7 @@ const cfg = await loadConfig();
 // O Google já confirmou o e-mail, mas ele não está em users.json. Aqui a pessoa entra na fila; um administrador aprova.
 // Pede um token de acesso (precisa de um clique, por isso é um botão) e o servidor confere o e-mail e o domínio.
 function oferecerPedido() {
-  if (!cfg.publicador) return;
+  if (!cfg.publicador || cfg.pedirAcesso === false) return;   // config.json › pedirAcesso:false = só quem já está em users.json entra
   const box = document.getElementById('pedido'), nome = document.getElementById('pedido-nome'), msg = document.getElementById('pedido-msg'), btn = document.getElementById('pedido-go');
   box.hidden = false;
   btn.onclick = async () => {

@@ -7,6 +7,7 @@
   },
   "googleClientId": "936653344522-5lmtpcr2ce1cn5q4av05kft0ve9k9fer.apps.googleusercontent.com",
   "loginSenha": false,
+  "pedirAcesso": false,
   "siteUrl": "https://muvvidev.github.io",
   "publicador": "https://135-181-136-45.sslip.io/"
 }

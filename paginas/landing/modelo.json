@@ -185,6 +185,46 @@
         "fontWeight": 700,
         "color": "#ffffff"
       }
+    },
+    {
+      "id": "avisoacesso",
+      "t": "text",
+      "name": "Aviso de acesso",
+      "lock": false,
+      "hide": false,
+      "f": {
+        "d": {
+          "x": 100,
+          "y": 634,
+          "w": 640,
+          "h": 24,
+          "r": 0
+        },
+        "m": {
+          "x": 24,
+          "y": 546,
+          "w": 342,
+          "h": 40,
+          "r": 0,
+          "fs": 13
+        }
+      },
+      "s": {
+        "fontFamily": "Andika",
+        "fontSize": 14,
+        "fontWeight": 400,
+        "italic": true,
+        "underline": false,
+        "upper": false,
+        "align": "left",
+        "color": "#6b6252",
+        "lh": 1.6,
+        "ls": 0
+      },
+      "an": null,
+      "link": null,
+      "text": "Acesso provisório: por enquanto só a equipe do museu entra.",
+      "ah": true
     }
   ],
   "assets": {}

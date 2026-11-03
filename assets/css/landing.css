@@ -33,6 +33,7 @@ body.landing{background:var(--papel);color:var(--tinta);font:17px/1.6 var(--font
 .entrar:hover{background:#34303f;transform:translateY(-1px)}
 .entrar:hover span[aria-hidden]{transform:translateX(3px)}
 .entrar span[aria-hidden]{display:inline-block;transition:transform .15s}
+.acesso-aviso{margin:12px 0 0;font-size:13px;font-style:italic;color:var(--tinta-3,var(--tinta-2));opacity:.85}
 .entrar:focus-visible{outline:3px solid #7b5cff;outline-offset:3px}
 
 /* celular / telas em pé: empilha (lettering em cima, texto embaixo) */
