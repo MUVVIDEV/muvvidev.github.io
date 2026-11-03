@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <script>/* acesso provisório: só entra quem fez login (sessão guardada por assets/js/core/auth.js). É uma porta de interface, não segurança real: o conteúdo publicado continua público no repositório. */(function(){try{var s=JSON.parse(localStorage.getItem("gehrarte.session")||"null");if(s&&s.exp>Date.now())return}catch(e){}document.documentElement.style.display="none";location.replace("../login.html?next=museu-antigo/")})()</script>
+  <link rel="icon" href="../assets/logo/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/logo/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/logo/favicon-192.png">
+  <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MUVVI — Museu Virtual do Vale do Ivaí</title>
+  <meta name="description" content="Museu Virtual do Vale do Ivaí: o patrimônio natural, arqueológico, arquitetônico, histórico e imaterial da região, pesquisado por estudantes de História da UEM.">
+  <meta property="og:title" content="MUVVI — Museu Virtual do Vale do Ivaí">
+  <meta property="og:description" content="O patrimônio cultural e natural do Vale do Ivaí, pesquisado e documentado por estudantes de História da UEM.">
+  <meta property="og:image" content="https://muvvidev.github.io/assets/logo/muvvi-compartilhar.jpg">
+  <meta property="og:url" content="https://muvvidev.github.io/museu/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    html,body{margin:0;background:#f6f1e4}
+    #pagina-site{min-height:100vh}
+    /* enquanto a página publicada não chega, nada de tela branca piscando */
+    #carregando{position:fixed;inset:0;display:grid;place-items:center;font:500 16px/1.6 system-ui,sans-serif;color:#6b6453;background:#f6f1e4}
+    #pagina-site:not(:empty) ~ #carregando{display:none}
+  </style>
+</head>
+<body>
+  <!-- O museu é feito no ArtAtk e publicado pela equipe: o que se vê aqui é paginas/museu/page.json,
+       montado no navegador. As 11 abas navegam pelo endereço (#/sobre, #/natural…). A exportação
+       anterior, feita à mão antes deste fluxo existir, ficou em export-inicial.html. -->
+  <div id="pagina-site"></div>
+  <div id="carregando">Carregando o museu…</div>
+  <script type="module">
+    import { mountPublished } from '../assets/js/core/embed.js';
+    const alvo = document.getElementById('pagina-site');
+    const aviso = document.getElementById('carregando');
+    try {
+      const doc = await mountPublished(alvo, 'museu', { modo: 'largura', onBg: (bg) => { document.body.style.background = bg; } });
+      aviso.remove();
+      if (!doc) location.replace('export-inicial.html');   // nada publicado ainda: mostra o museu de antes
+    } catch (e) {
+      aviso.textContent = 'Não consegui carregar o museu. ';
+      aviso.append(Object.assign(document.createElement('a'), { href: 'export-inicial.html', textContent: 'Abrir a versão anterior' }));
+    }
+  </script>
+  <noscript><p style="font:16px/1.6 system-ui;padding:24px;max-width:40em">O museu é montado no navegador. Habilite o JavaScript, ou abra <a href="export-inicial.html">a versão exportada</a>.</p></noscript>
+</body>
+</html>

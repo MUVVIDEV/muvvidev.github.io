@@ -1,0 +1,109 @@
+/* MUVVI — site estático. Gerado por tools/exportar-modelo.py (não edite o HTML: edite o modelo e regere). */
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;overflow-x:clip;min-height:100vh}
+:root{--kd:1;--km:1}
+
+/* O desenho do modelo (1200 px no PC, 390 px no celular) é escalado pela largura da janela:
+   site.js só escreve --kd/--km; o resto é CSS. */
+.stage{position:relative;margin:0 auto}
+.stage-d{width:calc(var(--w)*var(--kd)*1px);height:calc(var(--h)*var(--kd)*1px)}
+.stage-m{width:calc(var(--w)*var(--km)*1px);height:calc(var(--h)*var(--km)*1px)}
+.artboard{position:absolute;left:0;top:0;transform-origin:0 0}
+.stage-d .artboard{transform:scale(var(--kd))}
+.stage-m .artboard{transform:scale(var(--km))}
+@media (max-width:720px){.stage-d{display:none}}
+@media (min-width:721px){.stage-m{display:none}}
+.zona{position:absolute;left:0;top:0;width:100%;height:0;margin:0;padding:0}
+
+/* elementos */
+.el{position:absolute;box-sizing:border-box}
+.el-in,.el-lp{display:block;width:100%;height:100%;color:inherit;text-decoration:none}
+.el-text .el-in,.el-text .el-lp{height:auto}
+.el-ct{position:relative;display:block;width:100%;height:100%;margin:0;padding:0}
+.el-text .el-ct{height:auto}
+.el-ct.txt{white-space:pre-wrap;overflow-wrap:break-word}
+.el-ct.shape{box-sizing:border-box}
+img.el-ct{object-fit:cover;user-select:none}
+.el-svg svg{display:block;width:100%;height:100%}
+.shape-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 .5em;line-height:1.15;pointer-events:none}
+/* formas de borda a borda: passam dos lados do desenho para o fundo cobrir telas largas */
+.el.sangra{left:-100vw;width:calc(100% + 200vw)}
+.abas{display:flex;flex-wrap:wrap;align-items:center;align-content:center;box-sizing:border-box;line-height:1.25}
+.abas-item{color:inherit;text-decoration:none;white-space:nowrap}
+a.el-in{cursor:pointer}
+
+/* acessibilidade */
+.pular{position:absolute;left:8px;top:-60px;z-index:10;background:#0e3e20;color:#fff;padding:10px 16px;border-radius:8px;font:600 15px/1 system-ui,sans-serif;text-decoration:none}
+.pular:focus{top:8px}
+.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a:focus-visible{outline:3px solid #f2b705;outline-offset:3px;border-radius:4px}
+
+/* ----- entrada (acontece quando o elemento aparece na tela) ----- */
+.js .an-pre{opacity:0}
+.an-in.an-go{animation-duration:var(--ad,.8s);animation-timing-function:var(--ae,ease-out);animation-delay:var(--adl,0s);animation-fill-mode:backwards}
+.an-in-fade.an-go{animation-name:kf-fade}
+.an-in-fade-up.an-go{animation-name:kf-fade-up}
+.an-in-fade-down.an-go{animation-name:kf-fade-down}
+.an-in-fade-left.an-go{animation-name:kf-fade-left}
+.an-in-fade-right.an-go{animation-name:kf-fade-right}
+.an-in-zoom-in.an-go{animation-name:kf-zoom-in}
+.an-in-zoom-out.an-go{animation-name:kf-zoom-out}
+.an-in-bounce-in.an-go{animation-name:kf-bounce-in}
+.an-in-rotate-in.an-go{animation-name:kf-rotate-in}
+.an-in-flip.an-go{animation-name:kf-flip}
+.an-in-blur-in.an-go{animation-name:kf-blur-in}
+.an-in-reveal.an-go{animation-name:kf-reveal}
+.an-in-draw :is(path,line,polyline,polygon,circle,ellipse,rect){stroke-dasharray:1;stroke-dashoffset:0}
+.an-in-draw.an-go :is(path,line,polyline,polygon,circle,ellipse,rect){animation:kf-draw var(--ad,.8s) var(--ae,ease-out) var(--adl,0s) backwards}
+@keyframes kf-fade{from{opacity:0}}
+@keyframes kf-fade-up{from{opacity:0;transform:translateY(48px)}}
+@keyframes kf-fade-down{from{opacity:0;transform:translateY(-48px)}}
+@keyframes kf-fade-left{from{opacity:0;transform:translateX(-48px)}}
+@keyframes kf-fade-right{from{opacity:0;transform:translateX(48px)}}
+@keyframes kf-zoom-in{from{opacity:0;transform:scale(.6)}}
+@keyframes kf-zoom-out{from{opacity:0;transform:scale(1.5)}}
+@keyframes kf-bounce-in{0%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.08)}70%{transform:scale(.95)}}
+@keyframes kf-rotate-in{from{opacity:0;transform:rotate(-120deg) scale(.5)}}
+@keyframes kf-flip{from{opacity:0;transform:perspective(700px) rotateY(90deg)}}
+@keyframes kf-blur-in{from{opacity:0;filter:blur(20px)}}
+@keyframes kf-reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes kf-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+
+/* ----- contínuas ----- */
+.an-loop{animation-duration:var(--ld,3s);animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+.an-loop-float{animation-name:kf-float}
+.an-loop-pulse{animation-name:kf-pulse}
+.an-loop-spin{animation-name:kf-spin;animation-timing-function:linear}
+.an-loop-wiggle{animation-name:kf-wiggle}
+.an-loop-bounce{animation-name:kf-bounce}
+.an-loop-swing{animation-name:kf-swing;transform-origin:50% 0}
+.an-loop-glow{animation-name:kf-glow}
+.an-loop-blink{animation-name:kf-blink}
+@keyframes kf-float{50%{transform:translateY(-16px)}}
+@keyframes kf-pulse{50%{transform:scale(1.08)}}
+@keyframes kf-spin{to{transform:rotate(360deg)}}
+@keyframes kf-wiggle{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+@keyframes kf-bounce{0%,100%{transform:translateY(0);animation-timing-function:cubic-bezier(.3,0,.8,.5)}50%{transform:translateY(-28px);animation-timing-function:cubic-bezier(.2,.5,.7,1)}}
+@keyframes kf-swing{25%{transform:rotate(10deg)}75%{transform:rotate(-10deg)}}
+@keyframes kf-glow{50%{filter:drop-shadow(0 0 18px rgba(255,190,60,.95))}}
+@keyframes kf-blink{50%{opacity:.15}}
+
+/* ----- ao passar o mouse ----- */
+.an-hover{transition:transform .28s cubic-bezier(.2,.8,.2,1),filter .28s}
+.an-hover-grow:hover{transform:scale(1.08)}
+.an-hover-shrink:hover{transform:scale(.93)}
+.an-hover-tilt:hover{transform:rotate(-5deg) scale(1.03)}
+.an-hover-lift:hover{transform:translateY(-10px);filter:drop-shadow(0 14px 14px rgba(0,0,0,.28))}
+.an-hover-spin:hover{transform:rotate(180deg)}
+.an-hover-glow:hover{filter:drop-shadow(0 0 16px rgba(255,190,60,.95))}
+
+@media (prefers-reduced-motion:reduce){.viewer .an-loop{animation:none}}
+
+/* quem pede menos movimento não recebe animação nem laço */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .an-pre{opacity:1}
+  .an-in.an-go,.an-loop{animation:none!important}
+  .an-hover{transition:none}
+}
+@media print{.pular{display:none}.js .an-pre{opacity:1}}

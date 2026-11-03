@@ -5,7 +5,7 @@
       "id": "museu",
       "titulo": "MUVVI-publicado",
       "funcao": "O site do museu inteiro: as 11 abas (Início, Sobre, os cinco eixos do patrimônio, Mapa, Artistas, Material da equipe e Contato) num documento só, com topo e rodapé compartilhados — mudar o topo muda todas as abas. É a página que a equipe edita e publica.",
-      "caminho": "museu/index.html"
+      "caminho": "museu-antigo/index.html"
     },
     {
       "id": "landing",
