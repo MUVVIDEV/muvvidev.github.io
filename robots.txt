@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /museu-antigo/
+Disallow: /arquivos/
+Disallow: /editor/
+Disallow: /ferramentas/
+Disallow: /paginas/
+Disallow: /modelos/
+Disallow: /login.html
+Disallow: /perfil.html
+
+Sitemap: https://muvvidev.github.io/sitemap.xml
