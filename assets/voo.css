@@ -75,7 +75,6 @@
 .voo-prog b{position:absolute;right:12px;font:400 11px 'Cutive Mono',ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#cfe3d4;white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.6)}
 .voo-ini{top:-4px}.voo-fim{bottom:-4px}
 .voo-prog i{display:block;width:100%;height:0;border-radius:2px;background:#4db8ec}
-.voo-fontes{position:absolute;left:18px;right:60px;bottom:10px;margin:0;font:400 11px/1.4 'Andika',system-ui,sans-serif;color:rgba(252,251,246,.62);text-shadow:0 1px 6px rgba(0,0,0,.7);pointer-events:none}
 .voo-on .voo-card{max-height:calc(100% - 64px);overflow:auto}
 .voo-rot{display:block;margin:0 0 8px;font:400 12px 'Cutive Mono',ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#4a7a55}
 .voo-card h2{margin:0 0 10px;font:700 24px/1.15 'Libre Caslon Text',Georgia,serif;color:#0e3e20}

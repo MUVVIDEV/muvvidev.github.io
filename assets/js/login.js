@@ -5,7 +5,7 @@ import { createPublicador } from './core/publicador.js';
 // (senão viraria redirecionamento aberto). Sem next: a home do blog.
 const nextUrl = (() => {
   const n = new URLSearchParams(location.search).get('next') || '';
-  return /^[a-z0-9][a-z0-9._\/-]*(\?[a-z0-9=&._-]*)?(#[a-z0-9_-]*)?$/i.test(n) && !n.includes('..') && !n.includes('//') ? n : 'museu/';
+  return /^[a-z0-9][a-z0-9._\/-]*(\?[a-z0-9=&._-]*)?(#[a-z0-9_-]*)?$/i.test(n) && !n.includes('..') && !n.includes('//') ? n : 'index.html';
 })();
 
 if (session()) location.replace(nextUrl);
