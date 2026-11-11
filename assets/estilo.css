@@ -107,3 +107,5 @@ a:focus-visible{outline:3px solid #f2b705;outline-offset:3px;border-radius:4px}
   .an-hover{transition:none}
 }
 @media print{.pular{display:none}.js .an-pre{opacity:1}}
+/* celular: as abas do topo quebram em 2 linhas; a folga entre linhas vinha do gap das colunas (22 px) e abria um vão no cabeçalho */
+.stage-m .abas{row-gap:6px!important}

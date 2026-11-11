@@ -81,9 +81,12 @@
 .voo-card p{margin:0;font:400 15px/1.6 'Andika',system-ui,sans-serif;color:#2b2a3a}
 .voo-on .voo-card{box-shadow:0 18px 50px rgba(0,0,0,.4)}
 @media (max-width:720px){
+  .voo-on .voo{height:calc(3283vw + 100vh);height:calc(3283vw + 100svh)}   /* percurso do celular: em vw porque o zoom também é pela largura */
   .voo-on .voo-card{top:auto;bottom:150px;left:14px!important;right:14px!important;width:auto;transform:translateY(24px)}
   .voo-card h2{font-size:21px}.voo-card p{font-size:14px}
-  .voo-prog{right:10px}
+  .voo-prog{right:10px;top:12%;height:34%}   /* termina acima do cartão: o rótulo "foz" não pisa nele */
+  .voo-intro{padding-bottom:6vh!important}
+  .voo-dica{flex-direction:column;gap:8px;margin-top:14px;font-size:11px;letter-spacing:.14em;text-align:center}   /* uma linha só, em vez de quebrar ao lado do mouse */
   .voo-atrib{bottom:86px}   /* crédito e fontes quebram em várias linhas: o 1º sobe para não pisar no 2º */
 }
 @media (prefers-reduced-motion:reduce){.voo-mouse::after{animation:none}}
